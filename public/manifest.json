@@ -1,0 +1,9 @@
+{
+  "$schema": "https://json.schemastore.org/web-manifest-combined.json",
+  "name": "qwikboilerplate",
+  "short_name": "q-b",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#fff",
+  "description": "Qwik Cityによるアプリケーション構築基盤"
+}
