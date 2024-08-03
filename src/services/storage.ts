@@ -100,8 +100,8 @@ export class StorageService {
           CopySource: '/'.concat(this.bucket ?? '', '/', sourceKey),
         }),
       )
-      .catch(() => {
-        throw new Error('ファイルをコピーできませんでした。')
+      .catch((e) => {
+        throw new Error(e)
       })
   }
 }

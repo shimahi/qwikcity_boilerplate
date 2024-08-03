@@ -45,6 +45,31 @@ describe('#create', () => {
   })
 })
 
+describe('#update', () => {
+  const subject = new UserDBService(requestEventMock.platform.env.DB)
+  const userId = faker.string.uuid()
+  const userData = userFixture.build({
+    id: userId,
+  })
+  const inputs = {
+    displayName: faker.person.firstName(),
+    bio: faker.lorem.sentence(),
+  }
+
+  beforeEach(async () => {
+    await drizzle.insert(users).values(userData).run()
+  })
+
+  test('ユーザー情報が更新されること', async () => {
+    const result = await subject.update(userId, inputs)
+
+    expect(result).toEqual({
+      ...userData,
+      ...inputs,
+    })
+  })
+})
+
 describe('#paginate', () => {
   const subject = new UserDBService(requestEventMock.platform.env.DB)
 

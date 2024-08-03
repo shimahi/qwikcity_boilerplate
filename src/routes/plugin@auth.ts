@@ -79,6 +79,7 @@ export const { onRequest, useAuthSession, useAuthSignin, useAuthSignout } =
          */
         redirect: async ({ baseUrl }) => {
           const kvAuthKey: string | null = sharedMap.get('session')?.kvAuthKey
+
           if (kvAuthKey) {
             await kvService.user.delete(kvAuthKey)
           }

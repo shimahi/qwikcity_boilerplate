@@ -7,7 +7,12 @@ import {
   mock,
   test,
 } from 'bun:test'
-import { requestEventMock, userDBServiceMock, userFixture } from '@/__tests__'
+import {
+  kvServiceMock,
+  requestEventMock,
+  userDBServiceMock,
+  userFixture,
+} from '@/__tests__'
 import { faker } from '@faker-js/faker'
 import { UserDomain } from './user'
 
@@ -19,6 +24,10 @@ import { UserDomain } from './user'
 // UserDomainの依存モジュールをモックする
 mock.module('@/services/db/user', () => ({
   UserDBService: jest.fn().mockImplementation(() => userDBServiceMock),
+}))
+
+mock.module('@/services/kv', () => ({
+  KVService: jest.fn().mockImplementation(() => kvServiceMock),
 }))
 
 afterAll(() => {
@@ -125,6 +134,31 @@ describe('#create', () => {
         updatedAt: expect.any(Date),
       })
       expect(userDBServiceMock.create).toHaveBeenCalledTimes(2)
+    })
+  })
+})
+
+describe('#update', () => {
+  const subject = new UserDomain(requestEventMock)
+  const userId = faker.string.uuid()
+  const userData = userFixture.build()
+  const inputs = {
+    displayName: faker.person.firstName(),
+    bio: faker.lorem.sentence(),
+  }
+
+  beforeEach(() => {
+    userDBServiceMock.update.mockResolvedValue(userData)
+    kvServiceMock.user.get.mockResolvedValue(userData)
+  })
+
+  test('userDB.updateがコールされ、KVのログインユーザー情報が更新されること', async () => {
+    await subject.update(userId, inputs)
+
+    expect(userDBServiceMock.update).toHaveBeenCalledWith(userId, inputs)
+    expect(kvServiceMock.user.put).toHaveBeenCalledWith({
+      ...userData,
+      ...inputs,
     })
   })
 })
