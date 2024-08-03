@@ -1,6 +1,5 @@
 import { UserDomain } from '@/domains/user'
 import { useUpload } from '@/hooks/storage'
-import { authorize } from '@/routes/plugin@auth'
 import { useAuthSignin, useAuthSignout } from '@/routes/plugin@auth'
 import type { User } from '@/schemas'
 import type { AuthUser } from '@/services/kv'
@@ -17,11 +16,11 @@ import { LuMenu, LuX } from '@qwikest/icons/lucide'
 export const useLoader = routeLoader$(async (requestEvent) => {
   const userDomain = new UserDomain(requestEvent)
   const users = await userDomain.paginate()
-  const currentUser = await authorize(requestEvent)
+  // const currentUser = await authorize(requestEvent)
 
   return {
     users,
-    currentUser,
+    // currentUser,
   }
 })
 
@@ -58,14 +57,17 @@ export const useUpdateUser = routeAction$(
 
 export default component$(() => {
   const {
-    value: { users, currentUser },
+    value: {
+      users,
+      // currentUser
+    },
   } = useLoader()
 
   return (
     <>
       <Header />
       <div>
-        <Menu currentUser={currentUser} />
+        {/* <Menu currentUser={currentUser} /> */}
         <div class={css({})}>
           <div
             class={[
