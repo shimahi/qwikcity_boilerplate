@@ -41,6 +41,7 @@ export class UserDomain {
   ) {
     const { key, profileId } = parseProfileId(profileIds)
     const user = await this.getByProfileIds(profileIds)
+
     // 既にユーザーがいればreturn
     if (user) return user
 

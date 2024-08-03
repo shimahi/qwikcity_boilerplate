@@ -143,7 +143,7 @@ export const Contents = component$(({ users }: { users: User[] }) => {
                 borderRadius: '10px',
               })}
             >
-              <div class={css({})}>
+              <div>
                 <img
                   src={
                     'https://images.unsplash.com/photo-1527841430192-32adc8530984?q=80&w=3024&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
@@ -189,9 +189,9 @@ export const Contents = component$(({ users }: { users: User[] }) => {
                       textStyle: 'body',
                     })}
                   >
-                    　山路やまみちを登りながら、こう考えた。
-                    　智ちに働けば角かどが立つ。情じょうに棹さおさせば流される。意地を通とおせば窮屈きゅうくつだ。とかくに人の世は住みにくい。
-                    　住みにくさが高こうじると、安い所へ引き越したくなる。どこへ越しても住みにくいと悟さとった時、詩が生れて、画えが出来る。
+                    山路やまみちを登りながら、こう考えた。
+                    智ちに働けば角かどが立つ。情じょうに棹さおさせば流される。意地を通とおせば窮屈きゅうくつだ。とかくに人の世は住みにくい。
+                    住みにくさが高こうじると、安い所へ引き越したくなる。どこへ越しても住みにくいと悟さとった時、詩が生れて、画えが出来る。
                   </p>
                 </div>
               </div>
@@ -336,6 +336,7 @@ export const MenuContent = component$(
                 <div
                   class={css({
                     textStyle: 'body',
+                    color: 'gray.500',
                   })}
                 >
                   @{currentUser.accountId}
@@ -347,9 +348,9 @@ export const MenuContent = component$(
                   textStyle: 'body',
                 })}
               >
-                　山路やまみちを登りながら、こう考えた。
-                　智ちに働けば角かどが立つ。情じょうに棹さおさせば流される。意地を通とおせば窮屈きゅうくつだ。とかくに人の世は住みにくい。
-                　住みにくさが高こうじると、安い所へ引き越したくなる。どこへ越しても住みにくいと悟さとった時、詩が生れて、画えが出来る。
+                山路やまみちを登りながら、こう考えた。
+                智ちに働けば角かどが立つ。情じょうに棹さおさせば流される。意地を通とおせば窮屈きゅうくつだ。とかくに人の世は住みにくい。
+                住みにくさが高こうじると、安い所へ引き越したくなる。どこへ越しても住みにくいと悟さとった時、詩が生れて、画えが出来る。
               </p>
             </div>
           </div>

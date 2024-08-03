@@ -41,7 +41,7 @@ export const { onRequest, useAuthSession, useAuthSignin, useAuthSignout } =
 
           // すでにユーザーが存在する場合、そのユーザーとしてログインする
           const existingUser = await userDomain.getByProfileIds({
-            googleProfileId: token.sub,
+            googleProfileId: account.providerAccountId,
           })
           if (existingUser) {
             token.kvAuthKey = await kvService.user.put(existingUser)
@@ -50,7 +50,7 @@ export const { onRequest, useAuthSession, useAuthSignin, useAuthSignout } =
 
           // 新規登録の場合、Userを作成してログインする
           const user = await userDomain.create(
-            { googleProfileId: token.sub },
+            { googleProfileId: account.providerAccountId },
             {
               displayName: token.name ?? 'Jane Doe',
               accountId: `${token.email?.split('@')[0].replace(/\./g, '')}`,
