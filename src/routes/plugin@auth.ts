@@ -108,7 +108,7 @@ export async function authorize(
     kvAuthKey?: string
   }
 
-  if (!session?.kvAuthKey) {
+  if (!session.kvAuthKey) {
     if (throwWhenUnauthenticated) {
       throw new AuthError('Unauthorized')
     }
@@ -117,7 +117,7 @@ export async function authorize(
 
   // セッションに保存されたkeyを元にKVからユーザー情報を取得する
   const kvSerice = new KVService(requestEvent)
-  const stringifiedUser = await kvSerice.user.get(session.kvAuthKey)
+  const stringifiedUser = await kvSerice.user.get()
   if (!stringifiedUser) {
     if (throwWhenUnauthenticated) {
       throw new AuthError('Unauthorized')

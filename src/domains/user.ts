@@ -7,12 +7,10 @@ import cuid from 'cuid'
 export class UserDomain {
   private readonly userDB: UserDBService
   private readonly kvUser: KVService['user']
-  private readonly kvAuthKey: string | null
 
   constructor(requestEvent: RequestEventBase<QwikCityPlatform>) {
     this.userDB = new UserDBService(requestEvent.platform.env.DB)
     this.kvUser = new KVService(requestEvent).user
-    this.kvAuthKey = requestEvent.sharedMap.get('session')?.kvAuthKey
   }
 
   /**
@@ -73,11 +71,14 @@ export class UserDomain {
     )
   }
 
+  /**
+   * ユーザーを更新する。DBを更新したらKVのログインユーザー情報も更新する
+   * @param {string} id ユーザーID
+   * @param {Partial<User>} inputs 更新したいユーザー情報
+   */
   async update(id: User['id'], inputs: Partial<User>) {
     return this.userDB.update(id, inputs).then(async () => {
-      if (!this.kvAuthKey) return
-
-      const userKv = await this.kvUser.get(this.kvAuthKey)
+      const userKv = await this.kvUser.get()
       if (!userKv) return
 
       return this.kvUser.put({

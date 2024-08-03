@@ -1,5 +1,6 @@
 import type { User } from '@/schemas'
 import type { RequestEventBase } from '@builder.io/qwik-city'
+import cuid from 'cuid'
 
 /**
  * 認証ユーザー情報の型
@@ -21,9 +22,11 @@ export type AuthUser = Pick<
  */
 export class KVService {
   private readonly kv
+  private readonly kvAuthKey: string | undefined
 
   constructor(requestEvent: RequestEventBase<QwikCityPlatform>) {
     this.kv = requestEvent.platform.env.KV
+    this.kvAuthKey = requestEvent.sharedMap.get('session')?.kvAuthKey
   }
 
   /**
@@ -33,7 +36,8 @@ export class KVService {
    */
   readonly user = {
     put: async (user: AuthUser) => {
-      const kvAuthKey = `auth:${user.id}`
+      const kvAuthKey = this.kvAuthKey ?? `auth:${user.id}:${cuid()}`
+
       await this.kv.put(
         kvAuthKey,
         JSON.stringify({
@@ -46,8 +50,11 @@ export class KVService {
       )
       return kvAuthKey
     },
-    get: async (key: string) => {
-      return this.kv.get<AuthUser>(key, { type: 'json' })
+    /** 認証情報のキーはセッションに保存しているので、それを取得する */
+    get: async () => {
+      if (!this.kvAuthKey) return
+
+      return this.kv.get<AuthUser>(this.kvAuthKey, { type: 'json' })
     },
     delete: (key: string) => {
       return this.kv.delete(key)
