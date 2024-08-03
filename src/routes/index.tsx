@@ -4,7 +4,6 @@ import type { User } from '@/schemas'
 import type { AuthUser } from '@/services/kv'
 import { css } from '@/styled-system/css'
 import { container } from '@/styled-system/patterns'
-import { hover } from '@/styled-system/recipes'
 import { component$ } from '@builder.io/qwik'
 import type { DocumentHead } from '@builder.io/qwik-city'
 import { routeLoader$ } from '@builder.io/qwik-city'
@@ -387,7 +386,8 @@ export const MenuContent = component$(
         </div> */}
       </>
     ) : (
-      <div
+      <>
+        {/* <div
         class={css({
           display: 'flex',
           justifyContent: 'center',
@@ -416,7 +416,8 @@ export const MenuContent = component$(
         >
           ログイン
         </button>
-      </div>
+      </div>*/}
+      </>
     )
   },
 )
