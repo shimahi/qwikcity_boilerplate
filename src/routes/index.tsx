@@ -7,6 +7,7 @@ import { container } from '@/styled-system/patterns'
 import { component$ } from '@builder.io/qwik'
 import type { DocumentHead } from '@builder.io/qwik-city'
 import { routeLoader$ } from '@builder.io/qwik-city'
+import { LuMenu } from '@qwikest/icons/lucide'
 
 export const useLoader = routeLoader$(async (requestEvent) => {
   const userDomain = new UserDomain(requestEvent)
@@ -174,7 +175,11 @@ export const Contents = component$(({ users }: { users: User[] }) => {
 
 export const Menu = component$(
   ({ currentUser }: { currentUser: AuthUser | null }) => {
-    return <div>いぬ</div>
+    return (
+      <div>
+        いぬ <LuMenu font-size={32} />
+      </div>
+    )
 
     // return (
     //   <>
