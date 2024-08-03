@@ -27,6 +27,7 @@ export default component$(() => {
   return (
     <>
       <Header />
+      <Menu currentUser={null} />
       <div>
         <div class={css({})}>
           <div
