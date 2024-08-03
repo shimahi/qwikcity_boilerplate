@@ -7,7 +7,8 @@ import type { AuthUser } from '@/services/kv'
 import { StorageService } from '@/services/storage'
 import { css } from '@/styled-system/css'
 import { container } from '@/styled-system/patterns'
-import { $, Fragment, component$ } from '@builder.io/qwik'
+import { hover } from '@/styled-system/recipes'
+import { $, component$ } from '@builder.io/qwik'
 import type { DocumentHead } from '@builder.io/qwik-city'
 import { routeAction$, routeLoader$, z, zod$ } from '@builder.io/qwik-city'
 import { Modal } from '@qwik-ui/headless'
@@ -97,8 +98,7 @@ export const Header = component$(() => {
         <div>
           <h1
             class={css({
-              fontSize: '2xl',
-              fontWeight: 'bold',
+              textStyle: 'heading',
             })}
           >
             Qwik Summer
@@ -113,22 +113,92 @@ export const Contents = component$(({ users }: { users: User[] }) => {
   return (
     <div
       class={css({
+        py: 8,
         md: {
           maxWidth: 'calc(100% - 300px)',
         },
       })}
     >
-      {users?.map((user) => {
-        return (
-          <Fragment key={user.id}>
-            <small>@{user.accountId}</small>
-            <div>{user.displayName}</div>
-            <div>{user.googleProfileId}</div>
-            <div>{user.createdAt.toString()}</div>
-            <div>- - -</div>
-          </Fragment>
-        )
-      })}
+      <div
+        class={css({
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 8,
+        })}
+      >
+        {users?.map((user) => {
+          return (
+            <div
+              key={user.id}
+              class={css({
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+                gap: 4,
+                bgColor: 'gray.100',
+                maxWidth: '600px',
+                px: 5,
+                py: 5,
+                borderRadius: '10px',
+              })}
+            >
+              <div class={css({})}>
+                <img
+                  src={
+                    'https://images.unsplash.com/photo-1527841430192-32adc8530984?q=80&w=3024&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+                  }
+                  alt={`${user.displayName}のアバター`}
+                  class={css({
+                    width: '64px',
+                    height: '64px',
+                    borderRadius: '100%',
+                    objectFit: 'cover',
+                    mx: 'auto',
+                  })}
+                />
+                <div
+                  class={css({
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'baseline',
+                    gap: 1,
+                    width: '100%',
+                    mt: 2,
+                  })}
+                >
+                  <div class={css({ textStyle: 'subtitle1' })}>
+                    {user.displayName}
+                  </div>
+                  <small
+                    class={css({
+                      textStyle: 'caption',
+                      color: 'gray.500',
+                    })}
+                  >
+                    @{user.accountId}
+                  </small>
+                </div>
+                <div
+                  class={css({
+                    mt: 2,
+                  })}
+                >
+                  <p
+                    class={css({
+                      textStyle: 'body',
+                    })}
+                  >
+                    　山路やまみちを登りながら、こう考えた。
+                    　智ちに働けば角かどが立つ。情じょうに棹さおさせば流される。意地を通とおせば窮屈きゅうくつだ。とかくに人の世は住みにくい。
+                    　住みにくさが高こうじると、安い所へ引き越したくなる。どこへ越しても住みにくいと悟さとった時、詩が生れて、画えが出来る。
+                  </p>
+                </div>
+              </div>
+            </div>
+          )
+        })}
+      </div>
     </div>
   )
 })
@@ -232,6 +302,7 @@ export const MenuContent = component$(
                 justifyContent: 'center',
                 alignItems: 'center',
                 height: 16,
+                px: 5,
               })}
             >
               <div
@@ -254,7 +325,32 @@ export const MenuContent = component$(
                   })}
                 />
               </div>
-              {currentUser.displayName}
+              <div>
+                <div
+                  class={css({
+                    textStyle: 'subtitle1',
+                  })}
+                >
+                  {currentUser.displayName}
+                </div>
+                <div
+                  class={css({
+                    textStyle: 'body',
+                  })}
+                >
+                  @{currentUser.accountId}
+                </div>
+              </div>
+
+              <p
+                class={css({
+                  textStyle: 'body',
+                })}
+              >
+                　山路やまみちを登りながら、こう考えた。
+                　智ちに働けば角かどが立つ。情じょうに棹さおさせば流される。意地を通とおせば窮屈きゅうくつだ。とかくに人の世は住みにくい。
+                　住みにくさが高こうじると、安い所へ引き越したくなる。どこへ越しても住みにくいと悟さとった時、詩が生れて、画えが出来る。
+              </p>
             </div>
           </div>
 
@@ -267,18 +363,33 @@ export const MenuContent = component$(
               height: 16,
             })}
           >
-            <div>
-              <button
-                onClick$={() =>
-                  signOut.submit({
-                    callbackUrl: '/?logout=true',
-                  })
-                }
-              >
-                ログアウト
-              </button>
-            </div>
-            <div>アカウント削除</div>
+            <button
+              onClick$={() =>
+                signOut.submit({
+                  callbackUrl: '/?logout=true',
+                })
+              }
+              class={[
+                css({
+                  textStyle: 'button',
+                }),
+                hover(),
+              ]}
+            >
+              ログアウト
+            </button>
+            <button
+              onClick$={() => {}}
+              class={[
+                css({
+                  textStyle: 'button',
+                  color: 'red.600',
+                }),
+                hover(),
+              ]}
+            >
+              アカウント削除
+            </button>
           </div>
         </div>
       </>
@@ -298,13 +409,17 @@ export const MenuContent = component$(
               providerId: 'google',
             })
           }
-          class={css({
-            padding: '10px 20px',
-            bgColor: 'black',
-            color: 'white',
-            borderRadius: '5px',
-            fontWeight: 'bold',
-          })}
+          class={[
+            css({
+              padding: '10px 20px',
+              bgColor: 'black',
+              color: 'white',
+              borderRadius: '5px',
+              fontWeight: 'bold',
+              textStyle: 'button',
+            }),
+            hover(),
+          ]}
         >
           ログイン
         </button>
