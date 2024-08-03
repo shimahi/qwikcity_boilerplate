@@ -7,8 +7,6 @@ import { container } from '@/styled-system/patterns'
 import { component$ } from '@builder.io/qwik'
 import type { DocumentHead } from '@builder.io/qwik-city'
 import { routeLoader$ } from '@builder.io/qwik-city'
-import { Modal } from '@qwik-ui/headless'
-import { LuMenu, LuX } from '@qwikest/icons/lucide'
 
 export const useLoader = routeLoader$(async (requestEvent) => {
   const userDomain = new UserDomain(requestEvent)
@@ -176,69 +174,71 @@ export const Contents = component$(({ users }: { users: User[] }) => {
 
 export const Menu = component$(
   ({ currentUser }: { currentUser: AuthUser | null }) => {
-    return (
-      <>
-        <Modal.Root
-          class={css({
-            md: {
-              display: 'none',
-            },
-          })}
-        >
-          <Modal.Trigger
-            class={css({
-              position: 'fixed',
-              top: 5,
-              right: 5,
-              zIndex: 3,
-            })}
-          >
-            <LuMenu color="white" font-size={32} />
-          </Modal.Trigger>
-          <Modal.Panel>
-            <div
-              class={css({
-                position: 'fixed',
-                top: 0,
-                right: 0,
-                height: '100%',
-                width: '100%',
-                backgroundColor: 'gray.100',
-              })}
-            >
-              <Modal.Close
-                class={css({
-                  position: 'fixed',
-                  top: 5,
-                  right: 5,
-                  zIndex: 3,
-                })}
-              >
-                <LuX font-size={32} />
-              </Modal.Close>
-            </div>
-          </Modal.Panel>
-        </Modal.Root>
-        <div
-          class={css({
-            paddingTop: '64px',
-            backgroundColor: 'gray.100',
-            position: 'fixed',
-            top: 0,
-            right: 0,
-            height: '100%',
-            zIndex: 2,
-            width: '300px',
-            display: 'none',
-            md: {
-              display: 'block',
-            },
-          })}
-        >
-          いぬ
-        </div>
-      </>
-    )
+    return <div>いぬ</div>
+
+    // return (
+    //   <>
+    //     <Modal.Root
+    //       class={css({
+    //         md: {
+    //           display: 'none',
+    //         },
+    //       })}
+    //     >
+    //       <Modal.Trigger
+    //         class={css({
+    //           position: 'fixed',
+    //           top: 5,
+    //           right: 5,
+    //           zIndex: 3,
+    //         })}
+    //       >
+    //         <LuMenu color='white' font-size={32} />
+    //       </Modal.Trigger>
+    //       <Modal.Panel>
+    //         <div
+    //           class={css({
+    //             position: 'fixed',
+    //             top: 0,
+    //             right: 0,
+    //             height: '100%',
+    //             width: '100%',
+    //             backgroundColor: 'gray.100',
+    //           })}
+    //         >
+    //           <Modal.Close
+    //             class={css({
+    //               position: 'fixed',
+    //               top: 5,
+    //               right: 5,
+    //               zIndex: 3,
+    //             })}
+    //           >
+    //             <LuX font-size={32} />
+    //           </Modal.Close>
+    //         </div>
+    //       </Modal.Panel>
+    //     </Modal.Root>
+    //     <div
+    //       class={css({
+    //         paddingTop: '64px',
+    //         backgroundColor: 'gray.100',
+    //         position: 'fixed',
+    //         top: 0,
+    //         right: 0,
+    //         height: '100%',
+    //         zIndex: 2,
+    //         width: '300px',
+    //         display: 'none',
+    //         md: {
+    //           display: 'block',
+    //         },
+    //       })}
+    //     >
+    //       いぬ
+    //     </div>
+    //   </>
+    // )
   },
 )
 
