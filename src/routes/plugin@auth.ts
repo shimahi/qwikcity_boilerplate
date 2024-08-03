@@ -4,7 +4,7 @@ import { AuthError } from '@auth/core/errors'
 import type { Provider } from '@auth/core/providers'
 import Google from '@auth/core/providers/google'
 import { serverAuth$ } from '@builder.io/qwik-auth'
-import type { RequestEventAction, RequestEventCommon } from '@builder.io/qwik-city'
+import type { RequestEventCommon } from '@builder.io/qwik-city'
 
 /**
  * @description
@@ -13,7 +13,7 @@ import type { RequestEventAction, RequestEventCommon } from '@builder.io/qwik-ci
  * https://qwik.builder.io/docs/integrations/authjs
  */
 export const { onRequest, useAuthSession, useAuthSignin, useAuthSignout } =
-  serverAuth$(requestEvent => {
+  serverAuth$((requestEvent) => {
     const kvService = new KVService(requestEvent)
     const userDomain = new UserDomain(requestEvent)
     const { env, sharedMap } = requestEvent
@@ -54,7 +54,7 @@ export const { onRequest, useAuthSession, useAuthSignin, useAuthSignout } =
             {
               displayName: token.name ?? 'Jane Doe',
               accountId: `${token.email?.split('@')[0].replace(/\./g, '')}`,
-            }
+            },
           )
           token.kvAuthKey = await kvService.user.put(user)
           return token
@@ -99,7 +99,7 @@ export async function authorize(
   /** リクエストイベント */
   requestEvent: RequestEventCommon<QwikCityPlatform>,
   /** 認証されていない場合に例外をスローするかどうか  */
-  throwWhenUnauthenticated = false
+  throwWhenUnauthenticated = false,
 ) {
   // Auth.jsの"session"コールバックで付与されたセッション情報を取得する
   const session = requestEvent.sharedMap.get('session') as {

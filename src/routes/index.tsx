@@ -1,22 +1,26 @@
 import { UserDomain } from '@/domains/user'
-import { useEnv } from '@/hooks/env'
 import { useUpload } from '@/hooks/storage'
 import { authorize } from '@/routes/plugin@auth'
+import { useAuthSignin, useAuthSignout } from '@/routes/plugin@auth'
+import type { User } from '@/schemas'
+import type { AuthUser } from '@/services/kv'
 import { StorageService } from '@/services/storage'
 import { css } from '@/styled-system/css'
+import { container } from '@/styled-system/patterns'
 import { $, Fragment, component$ } from '@builder.io/qwik'
 import type { DocumentHead } from '@builder.io/qwik-city'
 import { routeAction$, routeLoader$, z, zod$ } from '@builder.io/qwik-city'
+import { Modal } from '@qwik-ui/headless'
+import { LuMenu, LuX } from '@qwikest/icons/lucide'
 
-import { useAuthSignin, useAuthSignout } from '@/routes/plugin@auth'
-export const useLoader = routeLoader$(async requestEvent => {
+export const useLoader = routeLoader$(async (requestEvent) => {
   const userDomain = new UserDomain(requestEvent)
   const users = await userDomain.paginate()
   const currentUser = await authorize(requestEvent)
 
   return {
     users,
-    user: currentUser,
+    currentUser,
   }
 })
 
@@ -36,100 +40,85 @@ export const useSave = routeAction$(
   },
   zod$({
     tmpKey: z.string(),
-  })
+  }),
 )
 
 export default component$(() => {
   const {
-    value: { users, user },
+    value: { users, currentUser },
   } = useLoader()
-  const { tmpKey, upload } = useUpload()
-  const save = useSave()
-  const env = useEnv()
-  const signIn = useAuthSignin()
-  const signOut = useAuthSignout()
-
-  const handleFileChange = $(async (file: File) => {
-    await upload(file)
-  })
 
   return (
-    <div
+    <>
+      <Header />
+      <div>
+        <Menu currentUser={currentUser} />
+        <div class={css({})}>
+          <div
+            class={[
+              container(),
+              css({
+                width: '100%',
+              }),
+            ]}
+          >
+            <Contents users={users} />
+          </div>
+        </div>
+      </div>
+    </>
+  )
+})
+
+export const Header = component$(() => {
+  return (
+    <header
       class={css({
-        px: 10,
-        py: 10,
-        md: {
-          px: 20,
-          py: 30,
+        display: 'flex',
+        alignItems: 'center',
+        px: 5,
+        py: 3,
+        position: 'fixed',
+        width: '100%',
+        height: '64px',
+        bgColor: 'cyan.900',
+        color: 'white',
+        zIndex: 3,
+        '& + *': {
+          paddingTop: '64px',
         },
       })}
     >
-      {user ? (
-        <button
-          onClick$={() =>
-            signOut.submit({
-              callbackUrl: '/?logout=true',
-            })
-          }
-        >
-          {user.displayName}さん: ログアウト
-        </button>
-      ) : (
-        <button
-          onClick$={() =>
-            signIn.submit({
-              providerId: 'google',
-            })
-          }
-        >
-          ログイン
-        </button>
-      )}
       <div
-        class={css({
-          border: 'solid 2px #cff',
-          px: 10,
-          py: 20,
+        class={container({
+          width: '100%',
         })}
       >
-        <input
-          type='file'
-          accept='.jpeg,.jpg,.png'
-          onChange$={async e => {
-            if (!(e.target instanceof HTMLInputElement)) return
-
-            const file = e.target.files?.[0]
-            if (!file) return
-            handleFileChange(file)
-          }}
-        />
-        {tmpKey}
-
-        <button
-          class={css({
-            px: 4,
-            py: 2,
-            bgColor: 'teal.800',
-            cursor: 'pointer',
-            color: 'white',
-            '&:hover:not(:disabled)': {
-              bgColor: 'teal.700',
-            },
-            '&:active:not(:disabled)': {
-              bgColor: 'teal.900',
-            },
-            _disabled: {
-              cursor: 'not-allowed',
-            },
-          })}
-          disabled={!tmpKey}
-          onClick$={() => save.submit({ tmpKey })}
-        >
-          Upload!!!
-        </button>
+        <div>
+          <h1
+            class={css({
+              fontSize: '2xl',
+              fontWeight: 'bold',
+            })}
+          >
+            Qwik Summer
+          </h1>
+        </div>
       </div>
+    </header>
+  )
+})
 
-      {users.map(user => {
+export const Contents = component$(({ users }: { users: User[] }) => {
+  return (
+    <div
+      class={css({
+        md: {
+          maxWidth: 'calc(100% - 300px)',
+        },
+      })}
+    >
+      {users?.map((user) => {
         return (
           <Fragment key={user.id}>
             <small>@{user.accountId}</small>
@@ -140,18 +129,250 @@ export default component$(() => {
           </Fragment>
         )
       })}
-      <hr />
-      {env?.name}
     </div>
   )
 })
 
+export const Menu = component$(
+  ({ currentUser }: { currentUser: AuthUser | null }) => {
+    return (
+      <>
+        <Modal.Root
+          class={css({
+            md: {
+              display: 'none',
+            },
+          })}
+        >
+          <Modal.Trigger
+            class={css({
+              position: 'fixed',
+              top: 5,
+              right: 5,
+              zIndex: 3,
+            })}
+          >
+            <LuMenu color="white" font-size={32} />
+          </Modal.Trigger>
+          <Modal.Panel>
+            <div
+              class={css({
+                position: 'fixed',
+                top: 0,
+                right: 0,
+                height: '100%',
+                width: '100%',
+                backgroundColor: 'gray.100',
+              })}
+            >
+              <Modal.Close
+                class={css({
+                  position: 'fixed',
+                  top: 5,
+                  right: 5,
+                  zIndex: 3,
+                })}
+              >
+                <LuX font-size={32} />
+              </Modal.Close>
+              <MenuContent currentUser={currentUser} />
+            </div>
+          </Modal.Panel>
+        </Modal.Root>
+        <div
+          class={css({
+            paddingTop: '64px',
+            backgroundColor: 'gray.100',
+            position: 'fixed',
+            top: 0,
+            right: 0,
+            height: '100%',
+            zIndex: 2,
+            width: '300px',
+            display: 'none',
+            md: {
+              display: 'block',
+            },
+          })}
+        >
+          <MenuContent currentUser={currentUser} />
+        </div>
+      </>
+    )
+  },
+)
+
+export const MenuContent = component$(
+  ({ currentUser }: { currentUser: AuthUser | null }) => {
+    const signIn = useAuthSignin()
+    const signOut = useAuthSignout()
+
+    return currentUser ? (
+      <>
+        <div
+          class={css({
+            width: '100%',
+            height: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+          })}
+        >
+          <div
+            class={css({
+              height: '100%',
+              display: 'grid',
+              placeItems: 'center',
+            })}
+          >
+            <div
+              class={css({
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 4,
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: 16,
+              })}
+            >
+              <div
+                class={css({
+                  width: 'auto',
+                  height: '64px',
+                  mx: 'auto',
+                  objectFit: 'cover',
+                  aspectRatio: 1,
+                })}
+              >
+                <img
+                  src="https://images.unsplash.com/photo-1489161587020-79aa193f04ff?q=80&w=3271&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                  alt=""
+                  class={css({
+                    objectFit: 'cover',
+                    borderRadius: '100%',
+                    width: '100%',
+                    height: '100%',
+                  })}
+                />
+              </div>
+              {currentUser.displayName}
+            </div>
+          </div>
+
+          <div
+            class={css({
+              display: 'flex',
+              gap: 6,
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: 16,
+            })}
+          >
+            <div>
+              <button
+                onClick$={() =>
+                  signOut.submit({
+                    callbackUrl: '/?logout=true',
+                  })
+                }
+              >
+                ログアウト
+              </button>
+            </div>
+            <div>アカウント削除</div>
+          </div>
+        </div>
+      </>
+    ) : (
+      <div
+        class={css({
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100%',
+          pb: '64px',
+        })}
+      >
+        <button
+          onClick$={() =>
+            signIn.submit({
+              providerId: 'google',
+            })
+          }
+          class={css({
+            padding: '10px 20px',
+            bgColor: 'black',
+            color: 'white',
+            borderRadius: '5px',
+            fontWeight: 'bold',
+          })}
+        >
+          ログイン
+        </button>
+      </div>
+    )
+  },
+)
+
 export const head: DocumentHead = {
-  title: 'Welcome to Qwik',
+  title: 'Qwik Summer',
   meta: [
     {
       name: 'description',
-      content: 'Qwik site description',
+      content: 'Sample App for Qwik City',
     },
   ],
 }
+
+const ImageUploader = component$(() => {
+  const { tmpKey, upload } = useUpload()
+  const handleFileChange = $(async (file: File) => {
+    await upload(file)
+  })
+  const save = useSave()
+
+  return (
+    <div
+      class={css({
+        border: 'solid 2px #cff',
+        px: 10,
+        py: 20,
+      })}
+    >
+      <input
+        type="file"
+        accept=".jpeg,.jpg,.png"
+        onChange$={async (e) => {
+          if (!(e.target instanceof HTMLInputElement)) return
+
+          const file = e.target.files?.[0]
+          if (!file) return
+          handleFileChange(file)
+        }}
+      />
+      {tmpKey}
+
+      <button
+        class={css({
+          px: 4,
+          py: 2,
+          bgColor: 'teal.800',
+          cursor: 'pointer',
+          color: 'white',
+          '&:hover:not(:disabled)': {
+            bgColor: 'teal.700',
+          },
+          '&:active:not(:disabled)': {
+            bgColor: 'teal.900',
+          },
+          _disabled: {
+            cursor: 'not-allowed',
+          },
+        })}
+        disabled={!tmpKey}
+        onClick$={() => save.submit({ tmpKey })}
+      >
+        Upload!!!
+      </button>
+    </div>
+  )
+})

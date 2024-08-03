@@ -6,7 +6,7 @@ import cuid from 'cuid'
  * 認証ユーザー情報の型
  * 認証情報をもとにKVから取得できるユーザー情報(の一部)
  */
-type AuthUser = Pick<User, 'id' | 'accountId' | 'displayName'>
+export type AuthUser = Pick<User, 'id' | 'accountId' | 'displayName'>
 
 /**
  * @description
