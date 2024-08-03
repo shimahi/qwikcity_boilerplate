@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "sqlite",
-  "id": "dfcc97bf-6249-4383-8609-6127f38b9dab",
+  "id": "67985e9f-745d-4d47-8577-82326daaa75a",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "posts": {
@@ -94,6 +94,20 @@
         },
         "googleProfileId": {
           "name": "googleProfileId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "avatarUrl": {
+          "name": "avatarUrl",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "bio": {
+          "name": "bio",
           "type": "text",
           "primaryKey": false,
           "notNull": false,

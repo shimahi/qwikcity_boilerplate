@@ -12,7 +12,9 @@ CREATE TABLE `users` (
 	`updatedAt` integer NOT NULL,
 	`accountId` text NOT NULL,
 	`displayName` text NOT NULL,
-	`googleProfileId` text
+	`googleProfileId` text,
+	`avatarUrl` text,
+	`bio` text
 );
 --> statement-breakpoint
 CREATE UNIQUE INDEX `posts_id_unique` ON `posts` (`id`);--> statement-breakpoint

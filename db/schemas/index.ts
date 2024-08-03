@@ -17,7 +17,7 @@ export const users = sqliteTable('users', {
   /** Google認証のOAuthプロファイルID */
   googleProfileId: text('googleProfileId'),
   /** ユーザーのアバター画像URL */
-  avatarUrl: text('profileImageUrl'),
+  avatarUrl: text('avatarUrl'),
   /** ユーザーのプロフィール文 */
   bio: text('bio'),
 })
