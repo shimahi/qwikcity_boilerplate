@@ -238,110 +238,7 @@ export const MenuContent = component$(
     // const signIn = useAuthSignin()
     // const signOut = useAuthSignout()
 
-    return currentUser ? (
-      <>
-        {/* <div
-          class={css({
-            width: '100%',
-            height: '100%',
-            display: 'flex',
-            flexDirection: 'column',
-          })}
-        >
-          <div
-            class={css({
-              height: '100%',
-              display: 'grid',
-              placeItems: 'center',
-            })}
-          >
-            <div
-              class={css({
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 4,
-                justifyContent: 'center',
-                alignItems: 'center',
-                height: 16,
-                px: 5,
-              })}
-            >
-              <ImageUploader
-                currentUser={currentUser}
-                avatarUrl={
-                  currentUser.avatarUrl ?? 'https://picsum.photos/100/100'
-                }
-              />
-              <div>
-                <div
-                  class={css({
-                    textStyle: 'subtitle1',
-                  })}
-                >
-                  {currentUser.displayName}
-                </div>
-                <div
-                  class={css({
-                    textStyle: 'body',
-                    color: 'gray.500',
-                  })}
-                >
-                  @{currentUser.accountId}
-                </div>
-              </div>
-
-              <p
-                class={css({
-                  textStyle: 'body',
-                })}
-              >
-                山路やまみちを登りながら、こう考えた。
-                智ちに働けば角かどが立つ。情じょうに棹さおさせば流される。意地を通とおせば窮屈きゅうくつだ。とかくに人の世は住みにくい。
-                住みにくさが高こうじると、安い所へ引き越したくなる。どこへ越しても住みにくいと悟さとった時、詩が生れて、画えが出来る。
-              </p>
-            </div>
-          </div>
-
-          <div
-            class={css({
-              display: 'flex',
-              gap: 6,
-              justifyContent: 'center',
-              alignItems: 'center',
-              height: 16,
-            })}
-          >
-            <button
-              onClick$={() =>
-                signOut.submit({
-                  callbackUrl: '/?logout=true',
-                })
-              }
-              class={[
-                css({
-                  textStyle: 'button',
-                }),
-                hover(),
-              ]}
-            >
-              ログアウト
-            </button>
-            <button
-              onClick$={() => {}}
-              class={[
-                css({
-                  textStyle: 'button',
-                  color: 'red.600',
-                }),
-                hover(),
-              ]}
-            >
-              アカウント削除
-            </button>
-          </div>
-        </div> */}
-      </>
-    ) : (
+    return (
       <div
         class={css({
           display: 'flex',
@@ -353,25 +250,25 @@ export const MenuContent = component$(
       >
         いぬ
         {/* <button
-          onClick$={() =>
-            signIn.submit({
-              providerId: 'google',
-            })
-          }
-          class={[
-            css({
-              padding: '10px 20px',
-              bgColor: 'black',
-              color: 'white',
-              borderRadius: '5px',
-              fontWeight: 'bold',
-              textStyle: 'button',
-            }),
-            hover(),
-          ]}
-        >
-          ログイン
-        </button> */}
+      onClick$={() =>
+        signIn.submit({
+          providerId: 'google',
+        })
+      }
+      class={[
+        css({
+          padding: '10px 20px',
+          bgColor: 'black',
+          color: 'white',
+          borderRadius: '5px',
+          fontWeight: 'bold',
+          textStyle: 'button',
+        }),
+        hover(),
+      ]}
+    >
+      ログイン
+    </button> */}
       </div>
     )
   },
