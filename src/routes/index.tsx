@@ -8,7 +8,7 @@ import { StorageService } from '@/services/storage'
 import { css } from '@/styled-system/css'
 import { container } from '@/styled-system/patterns'
 import { hover } from '@/styled-system/recipes'
-import { $, component$ } from '@builder.io/qwik'
+import { $, component$, useSignal } from '@builder.io/qwik'
 import type { DocumentHead } from '@builder.io/qwik-city'
 import { routeAction$, routeLoader$, z, zod$ } from '@builder.io/qwik-city'
 import { Modal } from '@qwik-ui/headless'
@@ -25,22 +25,34 @@ export const useLoader = routeLoader$(async (requestEvent) => {
   }
 })
 
-export const useSave = routeAction$(
+export const useSaveImage = routeAction$(
   async (data, requestEvent) => {
     const storageService = new StorageService(requestEvent)
-    await storageService.save({
+    return await storageService.save({
       tmpKey: data.tmpKey,
       object: {
         name: 'user',
         field: 'avatar',
-        id: 'aiueo',
+        id: data.userId,
       },
     })
-
-    return data.tmpKey
   },
   zod$({
     tmpKey: z.string(),
+    userId: z.string(),
+  }),
+)
+
+export const useUpdateUser = routeAction$(
+  async (data, requestEvent) => {
+    const userDomain = new UserDomain(requestEvent)
+    return await userDomain.update(data.userId, data.inputs)
+  },
+  zod$({
+    userId: z.string(),
+    inputs: z.object({
+      avatarUrl: z.string().nullable(),
+    }),
   }),
 )
 
@@ -145,10 +157,8 @@ export const Contents = component$(({ users }: { users: User[] }) => {
             >
               <div>
                 <img
-                  src={
-                    'https://images.unsplash.com/photo-1527841430192-32adc8530984?q=80&w=3024&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
-                  }
-                  alt={`${user.displayName}のアバター`}
+                  src={user.avatarUrl ?? 'https://picsum.photos/100/100'}
+                  alt={`${user.displayName}`}
                   class={css({
                     width: '64px',
                     height: '64px',
@@ -189,9 +199,7 @@ export const Contents = component$(({ users }: { users: User[] }) => {
                       textStyle: 'body',
                     })}
                   >
-                    山路やまみちを登りながら、こう考えた。
-                    智ちに働けば角かどが立つ。情じょうに棹さおさせば流される。意地を通とおせば窮屈きゅうくつだ。とかくに人の世は住みにくい。
-                    住みにくさが高こうじると、安い所へ引き越したくなる。どこへ越しても住みにくいと悟さとった時、詩が生れて、画えが出来る。
+                    {user.bio}
                   </p>
                 </div>
               </div>
@@ -305,26 +313,12 @@ export const MenuContent = component$(
                 px: 5,
               })}
             >
-              <div
-                class={css({
-                  width: 'auto',
-                  height: '64px',
-                  mx: 'auto',
-                  objectFit: 'cover',
-                  aspectRatio: 1,
-                })}
-              >
-                <img
-                  src="https://images.unsplash.com/photo-1489161587020-79aa193f04ff?q=80&w=3271&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                  alt=""
-                  class={css({
-                    objectFit: 'cover',
-                    borderRadius: '100%',
-                    width: '100%',
-                    height: '100%',
-                  })}
-                />
-              </div>
+              <ImageUploader
+                currentUser={currentUser}
+                avatarUrl={
+                  currentUser.avatarUrl ?? 'https://picsum.photos/100/100'
+                }
+              />
               <div>
                 <div
                   class={css({
@@ -439,56 +433,130 @@ export const head: DocumentHead = {
   ],
 }
 
-const ImageUploader = component$(() => {
-  const { tmpKey, upload } = useUpload()
-  const handleFileChange = $(async (file: File) => {
-    await upload(file)
-  })
-  const save = useSave()
+export const ImageUploader = component$(
+  ({
+    avatarUrl,
+    currentUser,
+  }: { avatarUrl: string; currentUser: AuthUser }) => {
+    const ref = useSignal<HTMLInputElement>()
+    const tmpAvatarUrl = useSignal<string>(avatarUrl)
+    const { tmpKey, upload, reset } = useUpload()
+    const save = useSaveImage()
+    const updateUser = useUpdateUser()
 
-  return (
-    <div
-      class={css({
-        border: 'solid 2px #cff',
-        px: 10,
-        py: 20,
-      })}
-    >
-      <input
-        type="file"
-        accept=".jpeg,.jpg,.png"
-        onChange$={async (e) => {
-          if (!(e.target instanceof HTMLInputElement)) return
+    const handleImageClick = $(() => {
+      ref.value?.click()
+    })
 
-          const file = e.target.files?.[0]
-          if (!file) return
-          handleFileChange(file)
-        }}
-      />
-      {tmpKey}
+    const handleFileChange = $(async (event: Event) => {
+      const input = event.target as HTMLInputElement
+      if (input.files && input.files.length > 0) {
+        const file = input.files[0]
+        tmpAvatarUrl.value = URL.createObjectURL(file)
 
-      <button
-        class={css({
-          px: 4,
-          py: 2,
-          bgColor: 'teal.800',
-          cursor: 'pointer',
-          color: 'white',
-          '&:hover:not(:disabled)': {
-            bgColor: 'teal.700',
-          },
-          '&:active:not(:disabled)': {
-            bgColor: 'teal.900',
-          },
-          _disabled: {
-            cursor: 'not-allowed',
-          },
-        })}
-        disabled={!tmpKey}
-        onClick$={() => save.submit({ tmpKey })}
-      >
-        Upload!!!
-      </button>
-    </div>
-  )
-})
+        await upload(file)
+      }
+    })
+
+    return (
+      <div>
+        <button onClick$={handleImageClick} class={hover()}>
+          <div
+            class={css({
+              width: 'auto',
+              height: '64px',
+              mx: 'auto',
+              objectFit: 'cover',
+              aspectRatio: 1,
+            })}
+          >
+            <img
+              src={tmpAvatarUrl.value}
+              alt=""
+              class={css({
+                objectFit: 'cover',
+                borderRadius: '100%',
+                width: '100%',
+                height: '100%',
+              })}
+            />
+          </div>
+        </button>
+
+        <input
+          ref={ref}
+          type="file"
+          accept=".jpeg,.jpg,.png"
+          onChange$={handleFileChange}
+          class={css({ display: 'none' })}
+        />
+        {!!tmpKey && (
+          <>
+            <button
+              class={css({
+                px: 4,
+                py: 2,
+                bgColor: 'red.800',
+                cursor: 'pointer',
+                color: 'white',
+                '&:hover:not(:disabled)': {
+                  bgColor: 'red.700',
+                },
+                '&:active:not(:disabled)': {
+                  bgColor: 'red.900',
+                },
+                _disabled: {
+                  cursor: 'not-allowed',
+                },
+              })}
+              onClick$={() => {
+                reset()
+                tmpAvatarUrl.value = avatarUrl
+              }}
+            >
+              cancel!!!
+            </button>
+            <button
+              class={css({
+                px: 4,
+                py: 2,
+                bgColor: 'teal.800',
+                cursor: 'pointer',
+                color: 'white',
+                '&:hover:not(:disabled)': {
+                  bgColor: 'teal.700',
+                },
+                '&:active:not(:disabled)': {
+                  bgColor: 'teal.900',
+                },
+                _disabled: {
+                  cursor: 'not-allowed',
+                },
+              })}
+              disabled={!tmpKey}
+              onClick$={async () => {
+                const newAvatarUrl = await save.submit({
+                  tmpKey,
+                  userId: currentUser.id,
+                })
+
+                updateUser
+                  .submit({
+                    userId: currentUser.id,
+                    inputs: {
+                      avatarUrl: `${newAvatarUrl?.value}`,
+                    },
+                  })
+                  .then(() => {
+                    reset()
+                  })
+              }}
+            >
+              Upload!!!
+            </button>
+          </>
+        )}
+      </div>
+    )
+  },
+)

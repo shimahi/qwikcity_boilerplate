@@ -1,12 +1,14 @@
 import type { User } from '@/schemas'
 import type { RequestEventBase } from '@builder.io/qwik-city'
-import cuid from 'cuid'
 
 /**
  * 認証ユーザー情報の型
  * 認証情報をもとにKVから取得できるユーザー情報(の一部)
  */
-export type AuthUser = Pick<User, 'id' | 'accountId' | 'displayName'>
+export type AuthUser = Pick<
+  User,
+  'id' | 'accountId' | 'displayName' | 'bio' | 'avatarUrl'
+>
 
 /**
  * @description
@@ -31,13 +33,15 @@ export class KVService {
    */
   readonly user = {
     put: async (user: AuthUser) => {
-      const kvAuthKey = `auth:${user.id}:${cuid()}`
+      const kvAuthKey = `auth:${user.id}`
       await this.kv.put(
         kvAuthKey,
         JSON.stringify({
           id: user.id,
           accountId: user.accountId,
           displayName: user.displayName,
+          bio: user.bio,
+          avatarUrl: user.avatarUrl,
         }),
       )
       return kvAuthKey

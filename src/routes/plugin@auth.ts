@@ -54,6 +54,8 @@ export const { onRequest, useAuthSession, useAuthSignin, useAuthSignout } =
             {
               displayName: token.name ?? 'Jane Doe',
               accountId: `${token.email?.split('@')[0].replace(/\./g, '')}`,
+              bio: '',
+              avatarUrl: token.picture ?? null,
             },
           )
           token.kvAuthKey = await kvService.user.put(user)

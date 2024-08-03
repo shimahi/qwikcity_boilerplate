@@ -1,13 +1,18 @@
 import type { User } from '@/schemas'
 import { UserDBService } from '@/services/db/user'
+import { KVService } from '@/services/kv'
 import type { RequestEventBase } from '@builder.io/qwik-city'
 import cuid from 'cuid'
 
 export class UserDomain {
-  private readonly userDB
+  private readonly userDB: UserDBService
+  private readonly kvUser: KVService['user']
+  private readonly kvAuthKey: string | null
 
   constructor(requestEvent: RequestEventBase<QwikCityPlatform>) {
     this.userDB = new UserDBService(requestEvent.platform.env.DB)
+    this.kvUser = new KVService(requestEvent).user
+    this.kvAuthKey = requestEvent.sharedMap.get('session')?.kvAuthKey
   }
 
   /**
@@ -66,6 +71,20 @@ export class UserDomain {
         accountId: `${params.accountId}${cuid().slice(4)}`,
       }),
     )
+  }
+
+  async update(id: User['id'], inputs: Partial<User>) {
+    return this.userDB.update(id, inputs).then(async () => {
+      if (!this.kvAuthKey) return
+
+      const userKv = await this.kvUser.get(this.kvAuthKey)
+      if (!userKv) return
+
+      return this.kvUser.put({
+        ...userKv,
+        ...inputs,
+      })
+    })
   }
 
   /**

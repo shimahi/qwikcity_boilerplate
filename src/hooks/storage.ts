@@ -4,8 +4,8 @@ import { $, useSignal } from '@builder.io/qwik'
 import { server$, z } from '@builder.io/qwik-city'
 
 const fileSizeValidator = z
-  .custom<FileList[number]>()
-  .refine((file) => file.size <= 30 * 1024 * 1024)
+  .custom<{ file: FileList[number] }>()
+  .refine((file) => file.file.size <= 30 * 1024 * 1024)
 
 /**
  * @description
@@ -42,10 +42,23 @@ export function useUpload() {
       headers: {
         'Content-Type': getMimeType(file.name),
       },
-    }).finally(() => {
-      loadingSignal.value = false
     })
+      .catch((e) => {
+        console.error(e)
+      })
+      .finally(() => {
+        loadingSignal.value = false
+      })
   })
 
-  return { upload, loading: loadingSignal.value, tmpKey: tmpKeySignal.value }
+  const reset = $(() => {
+    tmpKeySignal.value = ''
+  })
+
+  return {
+    upload,
+    loading: loadingSignal.value,
+    tmpKey: tmpKeySignal.value,
+    reset,
+  }
 }

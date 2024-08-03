@@ -16,6 +16,10 @@ export const users = sqliteTable('users', {
   displayName: text('displayName').notNull(),
   /** Google認証のOAuthプロファイルID */
   googleProfileId: text('googleProfileId'),
+  /** ユーザーのアバター画像URL */
+  avatarUrl: text('profileImageUrl'),
+  /** ユーザーのプロフィール文 */
+  bio: text('bio'),
 })
 
 export const posts = sqliteTable('posts', {

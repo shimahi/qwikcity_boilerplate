@@ -14,11 +14,13 @@ import type { RequestEventBase } from '@builder.io/qwik-city/middleware/request-
  */
 export class StorageService {
   private readonly endpoint
+  private readonly publicEndpoint
   private readonly bucket
   private readonly client
 
   constructor(requestEvent: RequestEventBase<QwikCityPlatform>) {
     this.endpoint = requestEvent.env.get('STORAGE_ENDPOINT')
+    this.publicEndpoint = requestEvent.env.get('PUBLIC_STORAGE_BUCKET_ENDPOINT')
     this.bucket = requestEvent.env.get('STORAGE_BUCKET_NAME')
     this.client = new S3Client({
       region: 'APAC',
@@ -74,7 +76,7 @@ export class StorageService {
       sourceKey: tmpKey,
     })
 
-    return `${this.endpoint}/${this.bucket}/${uploadKey}`
+    return `${this.publicEndpoint}/${uploadKey}`
   }
 
   /**

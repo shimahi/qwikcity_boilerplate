@@ -76,6 +76,8 @@ describe('#create', () => {
         {
           accountId: faker.lorem.word(),
           displayName: faker.person.firstName(),
+          avatarUrl: faker.image.avatar(),
+          bio: faker.lorem.sentence(),
         },
       )
 

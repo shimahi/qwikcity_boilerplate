@@ -1,4 +1,5 @@
 import { type UserInsert, users } from '@/schemas'
+import { eq } from 'drizzle-orm'
 import { DBServiceBase } from './_base'
 
 export class UserDBService extends DBServiceBase {
@@ -8,6 +9,20 @@ export class UserDBService extends DBServiceBase {
    */
   async create(input: UserInsert) {
     return this.drizzle.insert(users).values(input).returning().get()
+  }
+
+  /**
+   * ユーザーを更新する
+   * @param {string} id
+   * @param {Partial<User>} inputs
+   */
+  async update(id: string, inputs: Partial<UserInsert>) {
+    return this.drizzle
+      .update(users)
+      .set(inputs)
+      .where(eq(users.id, id))
+      .returning()
+      .get()
   }
 
   /**
