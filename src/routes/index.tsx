@@ -252,7 +252,7 @@ export const Menu = component$(
               >
                 <LuX font-size={32} />
               </Modal.Close>
-              <MenuContent currentUser={currentUser} />
+              {/* <MenuContent currentUser={currentUser} /> */}
             </div>
           </Modal.Panel>
         </Modal.Root>
@@ -272,7 +272,7 @@ export const Menu = component$(
             },
           })}
         >
-          <MenuContent currentUser={currentUser} />
+          {/* <MenuContent currentUser={currentUser} /> */}
         </div>
       </>
     )
