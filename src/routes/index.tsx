@@ -1,5 +1,5 @@
 import { UserDomain } from '@/domains/user'
-import { useAuthSignin, useAuthSignout } from '@/routes/plugin@auth'
+// import { useAuthSignin, useAuthSignout } from '@/routes/plugin@auth'
 import type { User } from '@/schemas'
 import type { AuthUser } from '@/services/kv'
 import { css } from '@/styled-system/css'
@@ -281,8 +281,8 @@ export const Menu = component$(
 
 export const MenuContent = component$(
   ({ currentUser }: { currentUser: AuthUser | null }) => {
-    const signIn = useAuthSignin()
-    const signOut = useAuthSignout()
+    // const signIn = useAuthSignin()
+    // const signOut = useAuthSignout()
 
     return currentUser ? (
       <>
