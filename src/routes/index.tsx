@@ -354,7 +354,8 @@ export const MenuContent = component$(
           pb: '64px',
         })}
       >
-        <button
+        いぬ
+        {/* <button
           onClick$={() =>
             signIn.submit({
               providerId: 'google',
@@ -373,7 +374,7 @@ export const MenuContent = component$(
           ]}
         >
           ログイン
-        </button>
+        </button> */}
       </div>
     )
   },
