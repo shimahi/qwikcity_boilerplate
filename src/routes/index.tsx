@@ -243,7 +243,7 @@ export const MenuContent = component$(
 
     return currentUser ? (
       <>
-        <div
+        {/* <div
           class={css({
             width: '100%',
             height: '100%',
@@ -342,7 +342,7 @@ export const MenuContent = component$(
               アカウント削除
             </button>
           </div>
-        </div>
+        </div> */}
       </>
     ) : (
       <div
