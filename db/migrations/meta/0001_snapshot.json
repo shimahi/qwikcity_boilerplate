@@ -99,8 +99,8 @@
           "notNull": false,
           "autoincrement": false
         },
-        "profileImageUrl": {
-          "name": "profileImageUrl",
+        "avatarUrl": {
+          "name": "avatarUrl",
           "type": "text",
           "primaryKey": false,
           "notNull": false,
