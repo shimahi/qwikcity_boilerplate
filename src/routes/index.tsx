@@ -14,7 +14,7 @@ import { routeAction$, routeLoader$, z, zod$ } from '@builder.io/qwik-city'
 import { Modal } from '@qwik-ui/headless'
 import { LuMenu, LuX } from '@qwikest/icons/lucide'
 
-export const useLoader = routeLoader$(async (requestEvent) => {
+export const useLoader = routeLoader$(async requestEvent => {
   const userDomain = new UserDomain(requestEvent)
   const users = await userDomain.paginate()
   const currentUser = await authorize(requestEvent)
@@ -40,7 +40,7 @@ export const useSaveImage = routeAction$(
   zod$({
     tmpKey: z.string(),
     userId: z.string(),
-  }),
+  })
 )
 
 export const useUpdateUser = routeAction$(
@@ -53,7 +53,7 @@ export const useUpdateUser = routeAction$(
     inputs: z.object({
       avatarUrl: z.string().nullable(),
     }),
-  }),
+  })
 )
 
 export default component$(() => {
@@ -65,7 +65,7 @@ export default component$(() => {
     <>
       <Header />
       <div>
-        <Menu currentUser={currentUser} />
+        {/* <Menu currentUser={currentUser} /> */}
         <div class={css({})}>
           <div
             class={[
@@ -138,7 +138,7 @@ export const Contents = component$(({ users }: { users: User[] }) => {
           gap: 8,
         })}
       >
-        {users?.map((user) => {
+        {users?.map(user => {
           return (
             <div
               key={user.id}
@@ -230,7 +230,7 @@ export const Menu = component$(
               zIndex: 3,
             })}
           >
-            <LuMenu color="white" font-size={32} />
+            <LuMenu color='white' font-size={32} />
           </Modal.Trigger>
           <Modal.Panel>
             <div
@@ -277,7 +277,7 @@ export const Menu = component$(
         </div>
       </>
     )
-  },
+  }
 )
 
 export const MenuContent = component$(
@@ -315,9 +315,7 @@ export const MenuContent = component$(
             >
               <ImageUploader
                 currentUser={currentUser}
-                avatarUrl={
-                  currentUser.avatarUrl ?? 'https://picsum.photos/100/100'
-                }
+                avatarUrl={currentUser.avatarUrl ?? 'https://picsum.photos/100/100'}
               />
               <div>
                 <div
@@ -420,7 +418,7 @@ export const MenuContent = component$(
         </button>
       </div>
     )
-  },
+  }
 )
 
 export const head: DocumentHead = {
@@ -434,10 +432,7 @@ export const head: DocumentHead = {
 }
 
 export const ImageUploader = component$(
-  ({
-    avatarUrl,
-    currentUser,
-  }: { avatarUrl: string; currentUser: AuthUser }) => {
+  ({ avatarUrl, currentUser }: { avatarUrl: string; currentUser: AuthUser }) => {
     const ref = useSignal<HTMLInputElement>()
     const tmpAvatarUrl = useSignal<string>(avatarUrl)
     const { tmpKey, upload, reset } = useUpload()
@@ -472,7 +467,7 @@ export const ImageUploader = component$(
           >
             <img
               src={tmpAvatarUrl.value}
-              alt=""
+              alt=''
               class={css({
                 objectFit: 'cover',
                 borderRadius: '100%',
@@ -485,8 +480,8 @@ export const ImageUploader = component$(
 
         <input
           ref={ref}
-          type="file"
-          accept=".jpeg,.jpg,.png"
+          type='file'
+          accept='.jpeg,.jpg,.png'
           onChange$={handleFileChange}
           class={css({ display: 'none' })}
         />
@@ -558,5 +553,5 @@ export const ImageUploader = component$(
         )}
       </div>
     )
-  },
+  }
 )
