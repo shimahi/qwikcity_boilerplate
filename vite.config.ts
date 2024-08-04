@@ -2,7 +2,6 @@ import { qwikCity } from '@builder.io/qwik-city/vite'
 import { qwikVite } from '@builder.io/qwik/optimizer'
 import { macroPlugin } from '@builder.io/vite-plugin-macro'
 import { Miniflare } from 'miniflare'
-import { nodePolyfills } from 'vite-plugin-node-polyfills'
 
 /**
  * This is the base config for vite.
@@ -55,7 +54,6 @@ export default defineConfig(async ({ command, mode }): Promise<UserConfig> => {
       qwikCity({ platform }),
       qwikVite(),
       tsconfigPaths(),
-      nodePolyfills(),
     ],
     // This tells Vite which dependencies to pre-build in dev mode.
     optimizeDeps: {

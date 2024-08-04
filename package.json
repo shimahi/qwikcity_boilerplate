@@ -68,7 +68,6 @@
     "typescript": "5.4.5",
     "undici": "*",
     "vite": "^5.2.10",
-    "vite-plugin-node-polyfills": "^0.22.0",
     "vite-tsconfig-paths": "^4.2.1",
     "wrangler": "^3.0.0",
     "zx": "^8.1.3"
