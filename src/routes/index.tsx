@@ -72,19 +72,19 @@ export default component$(() => {
     <>
       <Header />
       <div>
-        <Menu currentUser={currentUser} />
-        {/* <div class={css({})}> */}
-        {/* <div
+        {/* <Menu currentUser={currentUser} /> */}
+        <div class={css({})}>
+          <div
             class={[
               container(),
               css({
                 width: '100%',
               }),
             ]}
-          > */}
-        {/* <Contents users={users ?? []} /> */}
-        {/* </div> */}
-        {/* </div> */}
+          >
+            <Contents users={users ?? []} />
+          </div>
+        </div>
       </div>
     </>
   )
