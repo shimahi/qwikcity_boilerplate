@@ -16,16 +16,16 @@ import {
 } from '@builder.io/qwik-city'
 import { Modal } from '@qwik-ui/headless'
 import { LuMenu, LuX } from '@qwikest/icons/lucide'
-import { useAuthSignin, useAuthSignout } from './plugin@auth'
+import { authorize, useAuthSignin, useAuthSignout } from './plugin@auth'
 
 export const useLoader = routeLoader$(async (requestEvent) => {
   const userDomain = new UserDomain(requestEvent)
   const users = await userDomain.paginate()
-  // const currentUser = await authorize(requestEvent)
+  const currentUser = await authorize(requestEvent)
 
   return {
     users,
-    // currentUser,
+    currentUser,
   }
 })
 
@@ -62,29 +62,26 @@ export const useUpdateUser = routeAction$(
 
 export default component$(() => {
   const {
-    value: {
-      users,
-      //  currentUser
-    },
+    value: { users, currentUser },
   } = useLoader()
 
   return (
     <>
       <Header />
       <div>
-        <Menu currentUser={null} />
-        <div class={css({})}>
-          <div
+        <Menu currentUser={currentUser} />
+        {/* <div class={css({})}> */}
+        {/* <div
             class={[
               container(),
               css({
                 width: '100%',
               }),
             ]}
-          >
-            <Contents users={users ?? []} />
-          </div>
-        </div>
+          > */}
+        {/* <Contents users={users ?? []} /> */}
+        {/* </div> */}
+        {/* </div> */}
       </div>
     </>
   )
