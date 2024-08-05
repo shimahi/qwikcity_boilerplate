@@ -109,7 +109,7 @@ export async function authorize(
     kvAuthKey?: string
   }
 
-  if (!session.kvAuthKey) {
+  if (!session?.kvAuthKey) {
     if (throwWhenUnauthenticated) {
       throw new AuthError('Unauthorized')
     }
