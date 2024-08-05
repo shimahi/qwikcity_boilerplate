@@ -1,7 +1,7 @@
-// import { KVService } from '@/services/kv'
+import { KVService } from '@/services/kv'
 import { AuthError } from '@auth/core/errors'
 import type { Provider } from '@auth/core/providers'
-import GitHub from '@auth/core/providers/github'
+import Google from '@auth/core/providers/google'
 import { QwikAuth$ } from '@auth/qwik'
 import type { RequestEventCommon } from '@builder.io/qwik-city'
 
@@ -10,7 +10,7 @@ export const { onRequest, useSession, useSignIn, useSignOut } = QwikAuth$(
     secret: env.get('AUTH_SECRET') ?? '#',
     trustHost: true,
     providers: [
-      GitHub({
+      Google({
         clientId: env.get('GOOGLE_AUTH_CLIENT_ID') ?? '#',
         clientSecret: env.get('GOOGLE_AUTH_CLIENT_SECRET') ?? '#',
       }),
@@ -45,15 +45,14 @@ export async function authorize(
   }
 
   // セッションに保存されたkeyを元にKVからユーザー情報を取得する
-  // const kvSerice = new KVService(requestEvent)
-  // const stringifiedUser = await kvSerice.user.get()
-  // if (!stringifiedUser) {
-  //   if (throwWhenUnauthenticated) {
-  //     throw new AuthError('Unauthorized')
-  //   }
-  //   return null
-  // }
+  const kvSerice = new KVService(requestEvent)
+  const stringifiedUser = await kvSerice.user.get()
+  if (!stringifiedUser) {
+    if (throwWhenUnauthenticated) {
+      throw new AuthError('Unauthorized')
+    }
+    return null
+  }
 
-  // return stringifiedUser
-  return null
+  return stringifiedUser
 }
