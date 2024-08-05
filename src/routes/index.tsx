@@ -8,11 +8,11 @@ import { routeAction$, routeLoader$, z, zod$ } from '@builder.io/qwik-city'
 
 export const useLoader = routeLoader$(async (requestEvent) => {
   const userDomain = new UserDomain(requestEvent)
-  const users = await userDomain.paginate()
+  // const users = await userDomain.paginate()
   const currentUser = await authorize(requestEvent)
 
   return {
-    users,
+    // users,
     currentUser,
   }
 })
