@@ -19,9 +19,7 @@ export const { onRequest, useAuthSession, useAuthSignin, useAuthSignout } =
     const { env, sharedMap } = requestEvent
 
     return {
-      secret:
-        env.get('AUTH_SECRET') ??
-        'jgvBE9DB8XGs3Obmt8onZd4sJy5UQHdcEcCDkwT/3TQ=',
+      secret: env.get('AUTH_SECRET') ?? '#',
       trustHost: true,
       providers: [
         Google({
