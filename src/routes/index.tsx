@@ -1,5 +1,4 @@
 import { UserDomain } from '@/domains/user'
-import { authorize } from '@/routes/plugin@auth'
 import { StorageService } from '@/services/storage'
 import { css } from '@/styled-system/css'
 import { container } from '@/styled-system/patterns'
@@ -8,12 +7,12 @@ import { routeAction$, routeLoader$, z, zod$ } from '@builder.io/qwik-city'
 
 export const useLoader = routeLoader$(async (requestEvent) => {
   const userDomain = new UserDomain(requestEvent)
-  // const users = await userDomain.paginate()
-  const currentUser = await authorize(requestEvent)
+  const users = await userDomain.paginate()
+  // const currentUser = await authorize(requestEvent)
 
   return {
-    // users,
-    currentUser,
+    users,
+    // currentUser,
   }
 })
 
@@ -50,13 +49,13 @@ export const useUpdateUser = routeAction$(
 
 export default component$(() => {
   const {
-    value: { currentUser },
+    value: { users },
   } = useLoader()
 
   return (
     <>
       <div>
-        {currentUser ? currentUser.displayName : 'ログインしていません'}
+        {/* {currentUser ? currentUser.displayName : 'ログインしていません'} */}
         <div class={css({})}>
           <div
             class={[
@@ -66,7 +65,9 @@ export default component$(() => {
               }),
             ]}
           >
-            aaa
+            {users.length
+              ? users.map((user) => <div key={user.id}>{user.displayName}</div>)
+              : 'ユーザーがいません'}
           </div>
         </div>
       </div>
