@@ -403,11 +403,17 @@ export const MenuContent = component$(
         })}
       >
         <button
-          onClick$={() =>
-            signIn.submit({
-              providerId: 'google',
-            })
-          }
+          onClick$={() => {
+            console.log('clicked')
+
+            signIn
+              .submit({
+                providerId: 'google',
+              })
+              .catch((e) => {
+                console.log({ e })
+              })
+          }}
           class={[
             css({
               padding: '10px 20px',
