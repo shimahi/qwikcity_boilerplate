@@ -141,72 +141,74 @@ export const Contents = component$(({ users }: { users: User[] }) => {
         })}
       >
         {users?.map((user) => {
-          return (
-            <div
-              key={user.id}
-              class={css({
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                alignItems: 'center',
-                gap: 4,
-                bgColor: 'gray.100',
-                maxWidth: '600px',
-                px: 5,
-                py: 5,
-                borderRadius: '10px',
-              })}
-            >
-              <div>
-                <img
-                  src={user.avatarUrl ?? 'https://picsum.photos/100/100'}
-                  alt={`${user.displayName}`}
-                  class={css({
-                    width: '64px',
-                    height: '64px',
-                    borderRadius: '100%',
-                    objectFit: 'cover',
-                    mx: 'auto',
-                  })}
-                />
-                <div
-                  class={css({
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'baseline',
-                    gap: 1,
-                    width: '100%',
-                    mt: 2,
-                  })}
-                >
-                  <div class={css({ textStyle: 'subtitle1' })}>
-                    {user.displayName}
-                  </div>
-                  <small
-                    class={css({
-                      textStyle: 'caption',
-                      color: 'gray.500',
-                    })}
-                  >
-                    @{user.accountId}
-                  </small>
-                </div>
-                <div
-                  class={css({
-                    mt: 2,
-                  })}
-                >
-                  <p
-                    class={css({
-                      textStyle: 'body',
-                    })}
-                  >
-                    {user.bio}
-                  </p>
-                </div>
-              </div>
-            </div>
-          )
+          return <div key={user.id}>{user.displayName}</div>
+
+          // return (
+          //   <div
+          //     key={user.id}
+          //     class={css({
+          //       display: 'flex',
+          //       flexDirection: 'column',
+          //       justifyContent: 'center',
+          //       alignItems: 'center',
+          //       gap: 4,
+          //       bgColor: 'gray.100',
+          //       maxWidth: '600px',
+          //       px: 5,
+          //       py: 5,
+          //       borderRadius: '10px',
+          //     })}
+          //   >
+          //     <div>
+          //       <img
+          //         src={user.avatarUrl ?? 'https://picsum.photos/100/100'}
+          //         alt={`${user.displayName}`}
+          //         class={css({
+          //           width: '64px',
+          //           height: '64px',
+          //           borderRadius: '100%',
+          //           objectFit: 'cover',
+          //           mx: 'auto',
+          //         })}
+          //       />
+          //       <div
+          //         class={css({
+          //           display: 'flex',
+          //           justifyContent: 'center',
+          //           alignItems: 'baseline',
+          //           gap: 1,
+          //           width: '100%',
+          //           mt: 2,
+          //         })}
+          //       >
+          //         <div class={css({ textStyle: 'subtitle1' })}>
+          //           {user.displayName}
+          //         </div>
+          //         <small
+          //           class={css({
+          //             textStyle: 'caption',
+          //             color: 'gray.500',
+          //           })}
+          //         >
+          //           @{user.accountId}
+          //         </small>
+          //       </div>
+          //       <div
+          //         class={css({
+          //           mt: 2,
+          //         })}
+          //       >
+          //         <p
+          //           class={css({
+          //             textStyle: 'body',
+          //           })}
+          //         >
+          //           {user.bio}
+          //         </p>
+          //       </div>
+          //     </div>
+          //   </div>
+          // )
         })}
       </div>
     </div>
