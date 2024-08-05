@@ -14,8 +14,8 @@ import type { RequestEventCommon } from '@builder.io/qwik-city'
  */
 export const { onRequest, useAuthSession, useAuthSignin, useAuthSignout } =
   serverAuth$((requestEvent) => {
-    const kvService = new KVService(requestEvent)
     const userDomain = new UserDomain(requestEvent)
+    const kvService = new KVService(requestEvent)
     const { env, sharedMap } = requestEvent
 
     return {
