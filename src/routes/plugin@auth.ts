@@ -3,27 +3,33 @@ import { KVService } from '@/services/kv'
 import { AuthError } from '@auth/core/errors'
 import type { Provider } from '@auth/core/providers'
 import Google from '@auth/core/providers/google'
-import { QwikAuth$ } from '@auth/qwik'
+import { serverAuth$ } from '@builder.io/qwik-auth'
 import type { RequestEventCommon } from '@builder.io/qwik-city'
 
-export const { onRequest, useSession, useSignIn, useSignOut } = QwikAuth$(
-  (requestEvent) => {
+/**
+ * @description
+ * ログイン・認証機能に関する一連の処理
+ * QwikCityのAuth.jsプラグインを用いて、認証・認可を行い、その前後の処理をここで記述する
+ * https://qwik.builder.io/docs/integrations/authjs
+ */
+export const { onRequest, useAuthSession, useAuthSignin, useAuthSignout } =
+  serverAuth$((requestEvent) => {
     const kvService = new KVService(requestEvent)
     const userDomain = new UserDomain(requestEvent)
     const { env, sharedMap } = requestEvent
 
     return {
-      secret: env.get('AUTH_SECRET') ?? '#',
+      secret: env.get('AUTH_SECRET'),
       trustHost: true,
       providers: [
         Google({
-          clientId: env.get('GOOGLE_AUTH_CLIENT_ID') ?? '#',
-          clientSecret: env.get('GOOGLE_AUTH_CLIENT_SECRET') ?? '#',
+          clientId: env.get('GOOGLE_AUTH_CLIENT_ID'),
+          clientSecret: env.get('GOOGLE_AUTH_CLIENT_SECRET'),
         }),
       ] as Provider[],
       callbacks: {
         /** jwtセッションを使用している時(ログイン後以降)に呼び出される処理
-         * ログイン直後の初回呼び出し時は account に値が入っており、これを元にユーザー情報を取得してKVに保存。KVのキ>
+         * ログイン直後の初回呼び出し時は account に値が入っており、これを元にユーザー情報を取得してKVに保存。KVのキーをjwtトークンに追加して返却する。
          */
         jwt: async ({ token, account }) => {
           if (!account || !token.sub) {
@@ -82,17 +88,16 @@ export const { onRequest, useSession, useSignIn, useSignOut } = QwikAuth$(
         },
       },
     }
-  },
-)
+  })
 
 /**
-- * @description authorize
-- * 認証を行い、ログインユーザーの情報を取得する
-- * セッションの認証情報を元にKVに保存されたUserデータの一部を返す
-- * @param RequestEventAction QwikCityサーバのリクエストイベント
-- * @param {boolean} throwWhenUnauthenticated 認証されていない場合にエラーを投げるかどうか
-- * @returns {AuthUser} 認証ユーザー情報
-- */
+ * @description authorize
+ * 認証を行い、ログインユーザーの情報を取得する
+ * セッションの認証情報を元にKVに保存されたUserデータの一部を返す
+ * @param RequestEventAction QwikCityサーバのリクエストイベント
+ * @param {boolean} throwWhenUnauthenticated 認証されていない場合にエラーを投げるかどうか
+ * @returns {AuthUser} 認証ユーザー情報
+ */
 export async function authorize(
   /** リクエストイベント */
   requestEvent: RequestEventCommon<QwikCityPlatform>,
