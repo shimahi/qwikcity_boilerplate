@@ -2,11 +2,11 @@ import { KVService } from '@/services/kv'
 import { AuthError } from '@auth/core/errors'
 import type { Provider } from '@auth/core/providers'
 import GitHub from '@auth/core/providers/github'
-import { serverAuth$ } from '@builder.io/qwik-auth'
+import { QwikAuth$ } from '@auth/qwik'
 import type { RequestEventCommon } from '@builder.io/qwik-city'
 
-export const { onRequest, useAuthSession, useAuthSignin, useAuthSignout } =
-  serverAuth$(({ env }) => ({
+export const { onRequest, useSession, useSignIn, useSignOut } = QwikAuth$(
+  ({ env }) => ({
     secret: env.get('AUTH_SECRET') ?? '#',
     trustHost: true,
     providers: [
@@ -15,7 +15,8 @@ export const { onRequest, useAuthSession, useAuthSignin, useAuthSignout } =
         clientSecret: env.get('GOOGLE_AUTH_CLIENT_SECRET') ?? '#',
       }),
     ] as Provider[],
-  }))
+  }),
+)
 
 /**
  * @description authorize
