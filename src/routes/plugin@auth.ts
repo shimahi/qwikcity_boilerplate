@@ -1,4 +1,4 @@
-import { KVService } from '@/services/kv'
+// import { KVService } from '@/services/kv'
 import { AuthError } from '@auth/core/errors'
 import type { Provider } from '@auth/core/providers'
 import GitHub from '@auth/core/providers/github'
@@ -45,14 +45,15 @@ export async function authorize(
   }
 
   // セッションに保存されたkeyを元にKVからユーザー情報を取得する
-  const kvSerice = new KVService(requestEvent)
-  const stringifiedUser = await kvSerice.user.get()
-  if (!stringifiedUser) {
-    if (throwWhenUnauthenticated) {
-      throw new AuthError('Unauthorized')
-    }
-    return null
-  }
+  // const kvSerice = new KVService(requestEvent)
+  // const stringifiedUser = await kvSerice.user.get()
+  // if (!stringifiedUser) {
+  //   if (throwWhenUnauthenticated) {
+  //     throw new AuthError('Unauthorized')
+  //   }
+  //   return null
+  // }
 
-  return stringifiedUser
+  // return stringifiedUser
+  return null
 }
