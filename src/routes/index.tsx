@@ -77,7 +77,7 @@ export default component$(() => {
               }),
             ]}
           >
-            <Contents users={users} />
+            <Contents users={users ?? []} />
           </div>
         </div>
       </div>
