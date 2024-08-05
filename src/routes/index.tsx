@@ -7,7 +7,13 @@ import { css } from '@/styled-system/css'
 import { container } from '@/styled-system/patterns'
 import { hover } from '@/styled-system/recipes'
 import { $, component$, useSignal } from '@builder.io/qwik'
-import { routeAction$, routeLoader$, z, zod$ } from '@builder.io/qwik-city'
+import {
+  type DocumentHead,
+  routeAction$,
+  routeLoader$,
+  z,
+  zod$,
+} from '@builder.io/qwik-city'
 
 export const useLoader = routeLoader$(async (requestEvent) => {
   const userDomain = new UserDomain(requestEvent)
@@ -419,15 +425,15 @@ export const Contents = component$(({ users }: { users: User[] }) => {
 //   }
 // )
 
-// export const head: DocumentHead = {
-//   title: 'Qwik Summer',
-//   meta: [
-//     {
-//       name: 'description',
-//       content: 'Sample App for Qwik City',
-//     },
-//   ],
-// }
+export const head: DocumentHead = {
+  title: 'Qwik Summer',
+  meta: [
+    {
+      name: 'description',
+      content: 'Sample App for Qwik City',
+    },
+  ],
+}
 
 export const ImageUploader = component$(
   ({
