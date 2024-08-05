@@ -65,6 +65,8 @@ export default component$(() => {
     value: { users, currentUser },
   } = useLoader()
 
+  console.log({ users })
+
   return (
     <>
       <Header />
