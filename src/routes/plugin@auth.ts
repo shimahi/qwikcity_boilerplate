@@ -109,9 +109,9 @@ export async function authorize(
   // Auth.jsの"session"コールバックで付与されたセッション情報を取得する
   const session = requestEvent.sharedMap.get('session') as {
     kvAuthKey?: string
-  }
+  } | null
 
-  if (!session.kvAuthKey) {
+  if (!session?.kvAuthKey) {
     if (throwWhenUnauthenticated) {
       throw new AuthError('Unauthorized')
     }
