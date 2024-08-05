@@ -38,14 +38,14 @@
     "qwik": "qwik"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.540.0",
-    "@aws-sdk/s3-request-presigner": "^3.550.0",
     "@fontsource/kanit": "^5.0.20",
     "@qwikest/icons": "^0.0.13",
     "cuid": "^3.0.0",
     "drizzle-orm": "^0.29.4"
   },
   "devDependencies": {
+    "@aws-sdk/client-s3": "^3.540.0",
+    "@aws-sdk/s3-request-presigner": "^3.550.0",
     "@auth/core": "0.31.0",
     "@auth/qwik": "^0.2.3",
     "@biomejs/biome": "^1.8.2",
