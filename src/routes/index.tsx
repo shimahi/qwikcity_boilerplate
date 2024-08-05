@@ -1,9 +1,12 @@
 import { UserDomain } from '@/domains/user'
+import { useUpload } from '@/hooks/storage'
 import type { User } from '@/schemas'
+import type { AuthUser } from '@/services/kv'
 import { StorageService } from '@/services/storage'
 import { css } from '@/styled-system/css'
 import { container } from '@/styled-system/patterns'
-import { component$ } from '@builder.io/qwik'
+import { hover } from '@/styled-system/recipes'
+import { $, component$, useSignal } from '@builder.io/qwik'
 import { routeAction$, routeLoader$, z, zod$ } from '@builder.io/qwik-city'
 
 export const useLoader = routeLoader$(async (requestEvent) => {
@@ -426,127 +429,130 @@ export const Contents = component$(({ users }: { users: User[] }) => {
 //   ],
 // }
 
-// export const ImageUploader = component$(
-//   ({ avatarUrl, currentUser }: { avatarUrl: string; currentUser: AuthUser }) => {
-//     const ref = useSignal<HTMLInputElement>()
-//     const tmpAvatarUrl = useSignal<string>(avatarUrl)
-//     const { tmpKey, upload, reset } = useUpload()
-//     const save = useSaveImage()
-//     const updateUser = useUpdateUser()
+export const ImageUploader = component$(
+  ({
+    avatarUrl,
+    currentUser,
+  }: { avatarUrl: string; currentUser: AuthUser }) => {
+    const ref = useSignal<HTMLInputElement>()
+    const tmpAvatarUrl = useSignal<string>(avatarUrl)
+    const { tmpKey, upload, reset } = useUpload()
+    const save = useSaveImage()
+    const updateUser = useUpdateUser()
 
-//     const handleImageClick = $(() => {
-//       ref.value?.click()
-//     })
+    const handleImageClick = $(() => {
+      ref.value?.click()
+    })
 
-//     const handleFileChange = $(async (event: Event) => {
-//       const input = event.target as HTMLInputElement
-//       if (input.files && input.files.length > 0) {
-//         const file = input.files[0]
-//         tmpAvatarUrl.value = URL.createObjectURL(file)
+    const handleFileChange = $(async (event: Event) => {
+      const input = event.target as HTMLInputElement
+      if (input.files && input.files.length > 0) {
+        const file = input.files[0]
+        tmpAvatarUrl.value = URL.createObjectURL(file)
 
-//         await upload(file)
-//       }
-//     })
+        await upload(file)
+      }
+    })
 
-//     return (
-//       <div>
-//         <button onClick$={handleImageClick} class={hover()}>
-//           <div
-//             class={css({
-//               width: 'auto',
-//               height: '64px',
-//               mx: 'auto',
-//               objectFit: 'cover',
-//               aspectRatio: 1,
-//             })}
-//           >
-//             <img
-//               src={tmpAvatarUrl.value}
-//               alt=''
-//               class={css({
-//                 objectFit: 'cover',
-//                 borderRadius: '100%',
-//                 width: '100%',
-//                 height: '100%',
-//               })}
-//             />
-//           </div>
-//         </button>
+    return (
+      <div>
+        <button onClick$={handleImageClick} class={hover()}>
+          <div
+            class={css({
+              width: 'auto',
+              height: '64px',
+              mx: 'auto',
+              objectFit: 'cover',
+              aspectRatio: 1,
+            })}
+          >
+            <img
+              src={tmpAvatarUrl.value}
+              alt=""
+              class={css({
+                objectFit: 'cover',
+                borderRadius: '100%',
+                width: '100%',
+                height: '100%',
+              })}
+            />
+          </div>
+        </button>
 
-//         <input
-//           ref={ref}
-//           type='file'
-//           accept='.jpeg,.jpg,.png'
-//           onChange$={handleFileChange}
-//           class={css({ display: 'none' })}
-//         />
-//         {!!tmpKey && (
-//           <>
-//             <button
-//               class={css({
-//                 px: 4,
-//                 py: 2,
-//                 bgColor: 'red.800',
-//                 cursor: 'pointer',
-//                 color: 'white',
-//                 '&:hover:not(:disabled)': {
-//                   bgColor: 'red.700',
-//                 },
-//                 '&:active:not(:disabled)': {
-//                   bgColor: 'red.900',
-//                 },
-//                 _disabled: {
-//                   cursor: 'not-allowed',
-//                 },
-//               })}
-//               onClick$={() => {
-//                 reset()
-//                 tmpAvatarUrl.value = avatarUrl
-//               }}
-//             >
-//               cancel!!!
-//             </button>
-//             <button
-//               class={css({
-//                 px: 4,
-//                 py: 2,
-//                 bgColor: 'teal.800',
-//                 cursor: 'pointer',
-//                 color: 'white',
-//                 '&:hover:not(:disabled)': {
-//                   bgColor: 'teal.700',
-//                 },
-//                 '&:active:not(:disabled)': {
-//                   bgColor: 'teal.900',
-//                 },
-//                 _disabled: {
-//                   cursor: 'not-allowed',
-//                 },
-//               })}
-//               disabled={!tmpKey}
-//               onClick$={async () => {
-//                 const newAvatarUrl = await save.submit({
-//                   tmpKey,
-//                   userId: currentUser.id,
-//                 })
+        <input
+          ref={ref}
+          type="file"
+          accept=".jpeg,.jpg,.png"
+          onChange$={handleFileChange}
+          class={css({ display: 'none' })}
+        />
+        {!!tmpKey && (
+          <>
+            <button
+              class={css({
+                px: 4,
+                py: 2,
+                bgColor: 'red.800',
+                cursor: 'pointer',
+                color: 'white',
+                '&:hover:not(:disabled)': {
+                  bgColor: 'red.700',
+                },
+                '&:active:not(:disabled)': {
+                  bgColor: 'red.900',
+                },
+                _disabled: {
+                  cursor: 'not-allowed',
+                },
+              })}
+              onClick$={() => {
+                reset()
+                tmpAvatarUrl.value = avatarUrl
+              }}
+            >
+              cancel!!!
+            </button>
+            <button
+              class={css({
+                px: 4,
+                py: 2,
+                bgColor: 'teal.800',
+                cursor: 'pointer',
+                color: 'white',
+                '&:hover:not(:disabled)': {
+                  bgColor: 'teal.700',
+                },
+                '&:active:not(:disabled)': {
+                  bgColor: 'teal.900',
+                },
+                _disabled: {
+                  cursor: 'not-allowed',
+                },
+              })}
+              disabled={!tmpKey}
+              onClick$={async () => {
+                const newAvatarUrl = await save.submit({
+                  tmpKey,
+                  userId: currentUser.id,
+                })
 
-//                 updateUser
-//                   .submit({
-//                     userId: currentUser.id,
-//                     inputs: {
-//                       avatarUrl: `${newAvatarUrl?.value}`,
-//                     },
-//                   })
-//                   .then(() => {
-//                     reset()
-//                   })
-//               }}
-//             >
-//               Upload!!!
-//             </button>
-//           </>
-//         )}
-//       </div>
-//     )
-//   }
-// )
+                updateUser
+                  .submit({
+                    userId: currentUser.id,
+                    inputs: {
+                      avatarUrl: `${newAvatarUrl?.value}`,
+                    },
+                  })
+                  .then(() => {
+                    reset()
+                  })
+              }}
+            >
+              Upload!!!
+            </button>
+          </>
+        )}
+      </div>
+    )
+  },
+)
