@@ -14,9 +14,7 @@ import {
   z,
   zod$,
 } from '@builder.io/qwik-city'
-import { Modal } from '@qwik-ui/headless'
-import { LuMenu, LuX } from '@qwikest/icons/lucide'
-import { authorize, useAuthSignin, useAuthSignout } from './plugin@auth'
+import { authorize } from './plugin@auth'
 
 export const useLoader = routeLoader$(async (requestEvent) => {
   const userDomain = new UserDomain(requestEvent)
@@ -69,7 +67,7 @@ export default component$(() => {
     <>
       <Header />
       <div>
-        <Menu currentUser={currentUser} />
+        {/* <Menu currentUser={currentUser} /> */}
         <div class={css({})}>
           <div
             class={[
@@ -215,217 +213,215 @@ export const Contents = component$(({ users }: { users: User[] }) => {
   )
 })
 
-export const Menu = component$(
-  ({ currentUser }: { currentUser: AuthUser | null }) => {
-    return (
-      <>
-        <Modal.Root
-          class={css({
-            md: {
-              display: 'none',
-            },
-          })}
-        >
-          <Modal.Trigger
-            class={css({
-              position: 'fixed',
-              top: 5,
-              right: 5,
-              zIndex: 3,
-            })}
-          >
-            <LuMenu color="white" font-size={32} />
-          </Modal.Trigger>
-          <Modal.Panel>
-            <div
-              class={css({
-                position: 'fixed',
-                top: 0,
-                right: 0,
-                height: '100%',
-                width: '100%',
-                backgroundColor: 'gray.100',
-              })}
-            >
-              <Modal.Close
-                class={css({
-                  position: 'fixed',
-                  top: 5,
-                  right: 5,
-                  zIndex: 3,
-                })}
-              >
-                <LuX font-size={32} />
-              </Modal.Close>
-              <MenuContent currentUser={currentUser} />
-            </div>
-          </Modal.Panel>
-        </Modal.Root>
-        <div
-          class={css({
-            paddingTop: '64px',
-            backgroundColor: 'gray.100',
-            position: 'fixed',
-            top: 0,
-            right: 0,
-            height: '100%',
-            zIndex: 2,
-            width: '300px',
-            display: 'none',
-            md: {
-              display: 'block',
-            },
-          })}
-        >
-          <MenuContent currentUser={currentUser} />
-        </div>
-      </>
-    )
-  },
-)
+// export const Menu = component$(
+//   ({ currentUser }: { currentUser: AuthUser | null }) => {
+//     return (
+//       <>
+//         <Modal.Root
+//           class={css({
+//             md: {
+//               display: 'none',
+//             },
+//           })}
+//         >
+//           <Modal.Trigger
+//             class={css({
+//               position: 'fixed',
+//               top: 5,
+//               right: 5,
+//               zIndex: 3,
+//             })}
+//           >
+//             <LuMenu color='white' font-size={32} />
+//           </Modal.Trigger>
+//           <Modal.Panel>
+//             <div
+//               class={css({
+//                 position: 'fixed',
+//                 top: 0,
+//                 right: 0,
+//                 height: '100%',
+//                 width: '100%',
+//                 backgroundColor: 'gray.100',
+//               })}
+//             >
+//               <Modal.Close
+//                 class={css({
+//                   position: 'fixed',
+//                   top: 5,
+//                   right: 5,
+//                   zIndex: 3,
+//                 })}
+//               >
+//                 <LuX font-size={32} />
+//               </Modal.Close>
+//               <MenuContent currentUser={currentUser} />
+//             </div>
+//           </Modal.Panel>
+//         </Modal.Root>
+//         <div
+//           class={css({
+//             paddingTop: '64px',
+//             backgroundColor: 'gray.100',
+//             position: 'fixed',
+//             top: 0,
+//             right: 0,
+//             height: '100%',
+//             zIndex: 2,
+//             width: '300px',
+//             display: 'none',
+//             md: {
+//               display: 'block',
+//             },
+//           })}
+//         >
+//           <MenuContent currentUser={currentUser} />
+//         </div>
+//       </>
+//     )
+//   }
+// )
 
-export const MenuContent = component$(
-  ({ currentUser }: { currentUser: AuthUser | null }) => {
-    const signIn = useAuthSignin()
-    const signOut = useAuthSignout()
+// export const MenuContent = component$(
+//   ({ currentUser }: { currentUser: AuthUser | null }) => {
+//     const signIn = useAuthSignin()
+//     const signOut = useAuthSignout()
 
-    return currentUser ? (
-      <>
-        <div
-          class={css({
-            width: '100%',
-            height: '100%',
-            display: 'flex',
-            flexDirection: 'column',
-          })}
-        >
-          <div
-            class={css({
-              height: '100%',
-              display: 'grid',
-              placeItems: 'center',
-            })}
-          >
-            <div
-              class={css({
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 4,
-                justifyContent: 'center',
-                alignItems: 'center',
-                height: 16,
-                px: 5,
-              })}
-            >
-              <ImageUploader
-                currentUser={currentUser}
-                avatarUrl={
-                  currentUser.avatarUrl ?? 'https://picsum.photos/100/100'
-                }
-              />
-              <div>
-                <div
-                  class={css({
-                    textStyle: 'subtitle1',
-                  })}
-                >
-                  {currentUser.displayName}
-                </div>
-                <div
-                  class={css({
-                    textStyle: 'body',
-                    color: 'gray.500',
-                  })}
-                >
-                  @{currentUser.accountId}
-                </div>
-              </div>
+//     return currentUser ? (
+//       <>
+//         <div
+//           class={css({
+//             width: '100%',
+//             height: '100%',
+//             display: 'flex',
+//             flexDirection: 'column',
+//           })}
+//         >
+//           <div
+//             class={css({
+//               height: '100%',
+//               display: 'grid',
+//               placeItems: 'center',
+//             })}
+//           >
+//             <div
+//               class={css({
+//                 display: 'flex',
+//                 flexDirection: 'column',
+//                 gap: 4,
+//                 justifyContent: 'center',
+//                 alignItems: 'center',
+//                 height: 16,
+//                 px: 5,
+//               })}
+//             >
+//               <ImageUploader
+//                 currentUser={currentUser}
+//                 avatarUrl={currentUser.avatarUrl ?? 'https://picsum.photos/100/100'}
+//               />
+//               <div>
+//                 <div
+//                   class={css({
+//                     textStyle: 'subtitle1',
+//                   })}
+//                 >
+//                   {currentUser.displayName}
+//                 </div>
+//                 <div
+//                   class={css({
+//                     textStyle: 'body',
+//                     color: 'gray.500',
+//                   })}
+//                 >
+//                   @{currentUser.accountId}
+//                 </div>
+//               </div>
 
-              <p
-                class={css({
-                  textStyle: 'body',
-                })}
-              >
-                山路やまみちを登りながら、こう考えた。
-                智ちに働けば角かどが立つ。情じょうに棹さおさせば流される。意地を通とおせば窮屈きゅうくつだ。とかくに人の世は住みにくい。
-                住みにくさが高こうじると、安い所へ引き越したくなる。どこへ越しても住みにくいと悟さとった時、詩が生れて、画えが出来る。
-              </p>
-            </div>
-          </div>
+//               <p
+//                 class={css({
+//                   textStyle: 'body',
+//                 })}
+//               >
+//                 山路やまみちを登りながら、こう考えた。
+//                 智ちに働けば角かどが立つ。情じょうに棹さおさせば流される。意地を通とおせば窮屈きゅうくつだ。とかくに人の世は住みにくい。
+//                 住みにくさが高こうじると、安い所へ引き越したくなる。どこへ越しても住みにくいと悟さとった時、詩が生れて、画えが出来る。
+//               </p>
+//             </div>
+//           </div>
 
-          <div
-            class={css({
-              display: 'flex',
-              gap: 6,
-              justifyContent: 'center',
-              alignItems: 'center',
-              height: 16,
-            })}
-          >
-            <button
-              onClick$={() =>
-                signOut.submit({
-                  callbackUrl: '/?logout=true',
-                })
-              }
-              class={[
-                css({
-                  textStyle: 'button',
-                }),
-                hover(),
-              ]}
-            >
-              ログアウト
-            </button>
-            <button
-              onClick$={() => {}}
-              class={[
-                css({
-                  textStyle: 'button',
-                  color: 'red.600',
-                }),
-                hover(),
-              ]}
-            >
-              アカウント削除
-            </button>
-          </div>
-        </div>
-      </>
-    ) : (
-      <div
-        class={css({
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: '100%',
-          pb: '64px',
-        })}
-      >
-        <button
-          onClick$={() =>
-            signIn.submit({
-              providerId: 'google',
-            })
-          }
-          class={[
-            css({
-              padding: '10px 20px',
-              bgColor: 'black',
-              color: 'white',
-              borderRadius: '5px',
-              fontWeight: 'bold',
-              textStyle: 'button',
-            }),
-            hover(),
-          ]}
-        >
-          ログイン
-        </button>
-      </div>
-    )
-  },
-)
+//           <div
+//             class={css({
+//               display: 'flex',
+//               gap: 6,
+//               justifyContent: 'center',
+//               alignItems: 'center',
+//               height: 16,
+//             })}
+//           >
+//             <button
+//               onClick$={() =>
+//                 signOut.submit({
+//                   callbackUrl: '/?logout=true',
+//                 })
+//               }
+//               class={[
+//                 css({
+//                   textStyle: 'button',
+//                 }),
+//                 hover(),
+//               ]}
+//             >
+//               ログアウト
+//             </button>
+//             <button
+//               onClick$={() => {}}
+//               class={[
+//                 css({
+//                   textStyle: 'button',
+//                   color: 'red.600',
+//                 }),
+//                 hover(),
+//               ]}
+//             >
+//               アカウント削除
+//             </button>
+//           </div>
+//         </div>
+//       </>
+//     ) : (
+//       <div
+//         class={css({
+//           display: 'flex',
+//           justifyContent: 'center',
+//           alignItems: 'center',
+//           height: '100%',
+//           pb: '64px',
+//         })}
+//       >
+//         <button
+//           onClick$={() =>
+//             signIn.submit({
+//               providerId: 'google',
+//             })
+//           }
+//           class={[
+//             css({
+//               padding: '10px 20px',
+//               bgColor: 'black',
+//               color: 'white',
+//               borderRadius: '5px',
+//               fontWeight: 'bold',
+//               textStyle: 'button',
+//             }),
+//             hover(),
+//           ]}
+//         >
+//           ログイン
+//         </button>
+//       </div>
+//     )
+//   }
+// )
 
 export const head: DocumentHead = {
   title: 'Qwik Summer',
