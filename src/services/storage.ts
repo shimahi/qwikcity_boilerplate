@@ -19,15 +19,17 @@ export class StorageService {
   private readonly client
 
   constructor(requestEvent: RequestEventBase<QwikCityPlatform>) {
-    this.endpoint = requestEvent.env.get('STORAGE_ENDPOINT')
-    this.publicEndpoint = requestEvent.env.get('PUBLIC_STORAGE_BUCKET_ENDPOINT')
-    this.bucket = requestEvent.env.get('STORAGE_BUCKET_NAME')
+    this.endpoint = requestEvent.env.get('STORAGE_ENDPOINT') ?? '#'
+    this.publicEndpoint =
+      requestEvent.env.get('PUBLIC_STORAGE_BUCKET_ENDPOINT') ?? '#'
+    this.bucket = requestEvent.env.get('STORAGE_BUCKET_NAME') ?? '#'
     this.client = new S3Client({
       region: 'APAC',
-      endpoint: requestEvent.env.get('STORAGE_ENDPOINT'),
+      endpoint: requestEvent.env.get('STORAGE_ENDPOINT') ?? '#',
       credentials: {
-        accessKeyId: requestEvent.env.get('STORAGE_ACCESS_KEY_ID'),
-        secretAccessKey: requestEvent.env.get('STORAGE_SECRET_ACCESS_KEY'),
+        accessKeyId: requestEvent.env.get('STORAGE_ACCESS_KEY_ID') ?? '#',
+        secretAccessKey:
+          requestEvent.env.get('STORAGE_SECRET_ACCESS_KEY') ?? '#',
       },
     })
   }
