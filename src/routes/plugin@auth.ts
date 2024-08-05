@@ -14,6 +14,7 @@ import type { RequestEventCommon } from '@builder.io/qwik-city'
  */
 export const { onRequest, useAuthSession, useAuthSignin, useAuthSignout } =
   serverAuth$((requestEvent) => {
+    console.log({ requestEvent })
     const kvService = new KVService(requestEvent)
     const userDomain = new UserDomain(requestEvent)
     const { env, sharedMap } = requestEvent
@@ -32,7 +33,7 @@ export const { onRequest, useAuthSession, useAuthSignin, useAuthSignout } =
          * ログイン直後の初回呼び出し時は account に値が入っており、これを元にユーザー情報を取得してKVに保存。KVのキーをjwtトークンに追加して返却する。
          */
         jwt: async ({ token, account }) => {
-          return null
+          return token
 
           // if (!account || !token?.sub) {
           //   // ログイン直後ではない場合、現在のtokenを返す
@@ -71,20 +72,26 @@ export const { onRequest, useAuthSession, useAuthSignin, useAuthSignout } =
         session: async ({ session, token }) => {
           return {
             ...session,
-            kvAuthKey: token?.kvAuthKey,
-            provider: token?.provider,
+            // kvAuthKey: token?.kvAuthKey,
+            // provider: token?.provider,
           }
+
+          // return {
+          //   ...session,
+          //   kvAuthKey: token?.kvAuthKey,
+          //   provider: token?.provider,
+          // }
         },
         /**
          * ログイン/ログアウト時に呼び出される処理
          * ログアウト時にはKVからユーザー情報を削除する
          */
         redirect: async ({ baseUrl }) => {
-          const kvAuthKey: string | null = sharedMap.get('session')?.kvAuthKey
+          // const kvAuthKey: string | null = sharedMap.get('session')?.kvAuthKey
 
-          if (kvAuthKey) {
-            await kvService.user.delete(kvAuthKey)
-          }
+          // if (kvAuthKey) {
+          //   await kvService.user.delete(kvAuthKey)
+          // }
 
           return baseUrl
         },
