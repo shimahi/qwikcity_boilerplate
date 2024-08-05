@@ -32,34 +32,36 @@ export const { onRequest, useAuthSession, useAuthSignin, useAuthSignout } =
          * ログイン直後の初回呼び出し時は account に値が入っており、これを元にユーザー情報を取得してKVに保存。KVのキーをjwtトークンに追加して返却する。
          */
         jwt: async ({ token, account }) => {
-          if (!account || !token?.sub) {
-            // ログイン直後ではない場合、現在のtokenを返す
-            return token
-          }
-          // ログイン直後の場合に処理、tokenに認証情報を追加する
-          token.provider = account.provider
+          return null
 
-          // すでにユーザーが存在する場合、そのユーザーとしてログインする
-          const existingUser = await userDomain.getByProfileIds({
-            googleProfileId: account.providerAccountId,
-          })
-          if (existingUser) {
-            token.kvAuthKey = await kvService.user.put(existingUser)
-            return token
-          }
+          // if (!account || !token?.sub) {
+          //   // ログイン直後ではない場合、現在のtokenを返す
+          //   return token
+          // }
+          // // ログイン直後の場合に処理、tokenに認証情報を追加する
+          // token.provider = account.provider
 
-          // 新規登録の場合、Userを作成してログインする
-          const user = await userDomain.create(
-            { googleProfileId: account.providerAccountId },
-            {
-              displayName: token.name ?? 'Jane Doe',
-              accountId: `${token.email?.split('@')[0].replace(/\./g, '')}`,
-              bio: '',
-              avatarUrl: token.picture ?? null,
-            },
-          )
-          token.kvAuthKey = await kvService.user.put(user)
-          return token
+          // // すでにユーザーが存在する場合、そのユーザーとしてログインする
+          // const existingUser = await userDomain.getByProfileIds({
+          //   googleProfileId: account.providerAccountId,
+          // })
+          // if (existingUser) {
+          //   token.kvAuthKey = await kvService.user.put(existingUser)
+          //   return token
+          // }
+
+          // // 新規登録の場合、Userを作成してログインする
+          // const user = await userDomain.create(
+          //   { googleProfileId: account.providerAccountId },
+          //   {
+          //     displayName: token.name ?? 'Jane Doe',
+          //     accountId: `${token.email?.split('@')[0].replace(/\./g, '')}`,
+          //     bio: '',
+          //     avatarUrl: token.picture ?? null,
+          //   }
+          // )
+          // token.kvAuthKey = await kvService.user.put(user)
+          // return token
         },
         /**
          * セッションがチェックされると呼び出される処理
@@ -69,8 +71,8 @@ export const { onRequest, useAuthSession, useAuthSignin, useAuthSignout } =
         session: async ({ session, token }) => {
           return {
             ...session,
-            kvAuthKey: token.kvAuthKey,
-            provider: token.provider,
+            kvAuthKey: token?.kvAuthKey,
+            provider: token?.provider,
           }
         },
         /**
