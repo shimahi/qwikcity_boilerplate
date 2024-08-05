@@ -16,7 +16,7 @@ import {
 } from '@builder.io/qwik-city'
 import { Modal } from '@qwik-ui/headless'
 import { LuMenu, LuX } from '@qwikest/icons/lucide'
-import { authorize } from './plugin@auth'
+import { authorize, useAuthSignin, useAuthSignout } from './plugin@auth'
 
 export const useLoader = routeLoader$(async (requestEvent) => {
   const userDomain = new UserDomain(requestEvent)
@@ -286,8 +286,8 @@ export const Menu = component$(
 
 export const MenuContent = component$(
   ({ currentUser }: { currentUser: AuthUser | null }) => {
-    // const signIn = useAuthSignin()
-    // const signOut = useAuthSignout()
+    const signIn = useAuthSignin()
+    const signOut = useAuthSignout()
     return <div>いぬ</div>
 
     // return currentUser ? (
