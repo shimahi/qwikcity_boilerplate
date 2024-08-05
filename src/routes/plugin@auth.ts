@@ -34,7 +34,7 @@ export const { onRequest, useAuthSession, useAuthSignin, useAuthSignout } =
          * ログイン直後の初回呼び出し時は account に値が入っており、これを元にユーザー情報を取得してKVに保存。KVのキーをjwtトークンに追加して返却する。
          */
         jwt: async ({ token, account }) => {
-          if (!account || !token.sub) {
+          if (!account || !token?.sub) {
             // ログイン直後ではない場合、現在のtokenを返す
             return token
           }
@@ -71,8 +71,8 @@ export const { onRequest, useAuthSession, useAuthSignin, useAuthSignout } =
         session: async ({ session, token }) => {
           return {
             ...session,
-            kvAuthKey: token.kvAuthKey,
-            provider: token.provider,
+            kvAuthKey: token?.kvAuthKey,
+            provider: token?.provider,
           }
         },
         /**
