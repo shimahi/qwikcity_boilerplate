@@ -1,4 +1,3 @@
-// @ts-nocheck
 import type { User } from '@/schemas'
 import {
   CopyObjectCommand,
