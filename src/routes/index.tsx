@@ -66,13 +66,11 @@ export default component$(() => {
     value: { users, currentUser },
   } = useLoader()
 
-  console.log({ users })
-
   return (
     <>
       <Header />
       <div>
-        {/* <Menu currentUser={currentUser} /> */}
+        <Menu currentUser={currentUser} />
         <div class={css({})}>
           <div
             class={[
