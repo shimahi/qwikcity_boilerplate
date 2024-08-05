@@ -289,6 +289,22 @@ export const MenuContent = component$(
     const signIn = useAuthSignin()
     const signOut = useAuthSignout()
 
+    const handleSignIn = $(() => {
+      signIn
+        .submit({
+          providerId: 'google',
+        })
+        .catch((e) => {
+          console.log({ e })
+        })
+    })
+
+    const handleSignOut = $(() => {
+      signOut.submit({
+        callbackUrl: '/?logout=true',
+      })
+    })
+
     return currentUser ? (
       <>
         <div
@@ -363,11 +379,7 @@ export const MenuContent = component$(
             })}
           >
             <button
-              onClick$={() =>
-                signOut.submit({
-                  callbackUrl: '/?logout=true',
-                })
-              }
+              onClick$={handleSignOut}
               class={[
                 css({
                   textStyle: 'button',
@@ -403,17 +415,7 @@ export const MenuContent = component$(
         })}
       >
         <button
-          onClick$={() => {
-            console.log('clicked')
-
-            signIn
-              .submit({
-                providerId: 'google',
-              })
-              .catch((e) => {
-                console.log({ e })
-              })
-          }}
+          onClick$={handleSignIn}
           class={[
             css({
               padding: '10px 20px',
