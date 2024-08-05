@@ -1,4 +1,3 @@
-import { UserDomain } from '@/domains/user'
 import { KVService } from '@/services/kv'
 import { AuthError } from '@auth/core/errors'
 import type { Provider } from '@auth/core/providers'
@@ -15,8 +14,8 @@ import type { RequestEventCommon } from '@builder.io/qwik-city'
 export const { onRequest, useAuthSession, useAuthSignin, useAuthSignout } =
   serverAuth$((requestEvent) => {
     console.log({ requestEvent })
-    const kvService = new KVService(requestEvent)
-    const userDomain = new UserDomain(requestEvent)
+    // const kvService = new KVService(requestEvent)
+    // const userDomain = new UserDomain(requestEvent)
     const { env, sharedMap } = requestEvent
 
     return {
