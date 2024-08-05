@@ -1,3 +1,4 @@
+import { authorize } from '@/domains/auth'
 import { UserDomain } from '@/domains/user'
 import { useUpload } from '@/hooks/storage'
 import type { User } from '@/schemas'
@@ -16,7 +17,7 @@ import {
 } from '@builder.io/qwik-city'
 import { Modal } from '@qwik-ui/headless'
 import { LuMenu, LuX } from '@qwikest/icons/lucide'
-import { authorize, useAuthSignin, useAuthSignout } from './plugin@auth'
+import { useAuthSignin, useAuthSignout } from './plugin@auth'
 
 export const useLoader = routeLoader$(async (requestEvent) => {
   const userDomain = new UserDomain(requestEvent)
