@@ -13,12 +13,12 @@ export const { onRequest, useSession, useSignIn, useSignOut } = QwikAuth$(
     const { env, sharedMap } = requestEvent
 
     return {
-      secret: env.get('AUTH_SECRET'),
+      secret: env.get('AUTH_SECRET') ?? '#',
       trustHost: true,
       providers: [
         Google({
-          clientId: env.get('GOOGLE_AUTH_CLIENT_ID'),
-          clientSecret: env.get('GOOGLE_AUTH_CLIENT_SECRET'),
+          clientId: env.get('GOOGLE_AUTH_CLIENT_ID') ?? '#',
+          clientSecret: env.get('GOOGLE_AUTH_CLIENT_SECRET') ?? '#',
         }),
       ] as Provider[],
       callbacks: {
