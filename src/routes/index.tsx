@@ -71,17 +71,15 @@ export default component$(() => {
       <Header />
       <div>
         <Menu currentUser={currentUser} />
-        <div class={css({})}>
-          <div
-            class={[
-              container(),
-              css({
-                width: '100%',
-              }),
-            ]}
-          >
-            <Contents users={users ?? []} />
-          </div>
+        <div
+          class={[
+            container(),
+            css({
+              width: '100%',
+            }),
+          ]}
+        >
+          <Contents users={users ?? []} />
         </div>
       </div>
     </>
@@ -225,6 +223,7 @@ export const Menu = component$(
             'Modal-wrapper',
             css({
               display: 'block',
+              border: '1px solid red',
               md: {
                 display: 'none',
               },
@@ -239,6 +238,7 @@ export const Menu = component$(
                 top: 5,
                 right: 5,
                 zIndex: 3,
+                border: '1px solid blue',
               }),
             ]}
           >
@@ -261,6 +261,7 @@ export const Menu = component$(
                   top: 5,
                   right: 5,
                   zIndex: 3,
+                  border: '1px solid blue',
                 })}
               >
                 <LuX font-size={32} />
