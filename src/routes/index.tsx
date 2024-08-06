@@ -242,7 +242,7 @@ export const Menu = component$(
               }),
             ]}
           >
-            <LuMenu color="white" font-size={32} />
+            <LuMenu color="white" font-size={32} class="menu-button" />
           </Modal.Trigger>
           <Modal.Panel>
             <div
@@ -256,13 +256,16 @@ export const Menu = component$(
               })}
             >
               <Modal.Close
-                class={css({
-                  position: 'fixed',
-                  top: 5,
-                  right: 5,
-                  zIndex: 3,
-                  border: '1px solid blue',
-                })}
+                class={[
+                  'modal-Close',
+                  css({
+                    position: 'fixed',
+                    top: 5,
+                    right: 5,
+                    zIndex: 3,
+                    border: '1px solid blue',
+                  }),
+                ]}
               >
                 <LuX font-size={32} />
               </Modal.Close>
