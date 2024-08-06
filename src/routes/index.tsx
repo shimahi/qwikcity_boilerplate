@@ -221,19 +221,26 @@ export const Menu = component$(
     return (
       <>
         <Modal.Root
-          class={css({
-            md: {
-              display: 'none',
-            },
-          })}
+          class={[
+            'Modal-wrapper',
+            css({
+              display: 'block',
+              md: {
+                display: 'none',
+              },
+            }),
+          ]}
         >
           <Modal.Trigger
-            class={css({
-              position: 'fixed',
-              top: 5,
-              right: 5,
-              zIndex: 3,
-            })}
+            class={[
+              'Modal-trigger',
+              css({
+                position: 'fixed',
+                top: 5,
+                right: 5,
+                zIndex: 3,
+              }),
+            ]}
           >
             <LuMenu color="white" font-size={32} />
           </Modal.Trigger>
