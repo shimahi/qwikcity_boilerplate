@@ -40,12 +40,6 @@ export class StorageService {
    * @param {string} tempFileKey tmpディレクトリ内のファイルパス(キー)
    */
   async generateUploadUrl(tmpKey: string) {
-    console.log('generateUploadUrl:')
-    console.log({ tmpKey })
-    console.log({ bucket: this.bucket })
-    console.log({ endpoint: this.endpoint })
-    console.log({ client: this.client })
-
     return getSignedUrl(
       this.client,
       new PutObjectCommand({ Bucket: this.bucket, Key: tmpKey }),
