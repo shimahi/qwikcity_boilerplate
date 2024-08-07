@@ -1,3 +1,4 @@
+import { SVG } from '@/components/ui/svg'
 import { authorize } from '@/domains/auth'
 import { UserDomain } from '@/domains/user'
 import { useUpload } from '@/hooks/storage'
@@ -16,7 +17,6 @@ import {
   zod$,
 } from '@builder.io/qwik-city'
 import { Modal } from '@qwik-ui/headless'
-import { LuMenu, LuX } from '@qwikest/icons/lucide'
 import { useAuthSignin, useAuthSignout } from './plugin@auth'
 
 export const useLoader = routeLoader$(async (requestEvent) => {
@@ -242,7 +242,7 @@ export const Menu = component$(
               }),
             ]}
           >
-            <LuMenu color="white" font-size={32} class="menu-button" />
+            <SVG.Menu color="white" font-size={32} class="menu-button" />
           </Modal.Trigger>
           <Modal.Panel>
             <div
@@ -267,7 +267,7 @@ export const Menu = component$(
                   }),
                 ]}
               >
-                <LuX font-size={32} />
+                <SVG.Close font-size={32} />
               </Modal.Close>
               <MenuContent currentUser={currentUser} />
             </div>
