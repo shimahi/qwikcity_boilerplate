@@ -240,7 +240,7 @@ export const Menu = component$(
               }),
             ]}
           >
-            <SVG.Menu color="white" font-size={32} class="menu-button" />
+            <SVG.Menu color="white" class="menu-button" />
           </Modal.Trigger>
           <Modal.Panel>
             <div
@@ -264,7 +264,7 @@ export const Menu = component$(
                   }),
                 ]}
               >
-                <SVG.Close font-size={32} />
+                <SVG.Close />
               </Modal.Close>
               <MenuContent currentUser={currentUser} />
             </div>
@@ -501,20 +501,32 @@ export const ImageUploader = component$(
           onChange$={handleFileChange}
           class={css({ display: 'none' })}
         />
+
         {!!tmpKey && (
-          <>
+          <div
+            class={css({
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              gap: 3,
+            })}
+          >
             <button
               class={css({
-                px: 4,
-                py: 2,
-                bgColor: 'red.800',
+                width: 6,
+                height: 6,
+                border: '1px solid',
+                borderColor: 'red.200',
+                display: 'grid',
+                placeItems: 'center',
+                borderRadius: '100%',
                 cursor: 'pointer',
-                color: 'white',
                 '&:hover:not(:disabled)': {
-                  bgColor: 'red.700',
+                  bgColor: 'red.200',
                 },
                 '&:active:not(:disabled)': {
-                  bgColor: 'red.900',
+                  bgColor: 'red.300',
+                  borderColor: 'red.300',
                 },
                 _disabled: {
                   cursor: 'not-allowed',
@@ -525,20 +537,26 @@ export const ImageUploader = component$(
                 tmpAvatarUrl.value = avatarUrl
               }}
             >
-              cancel!!!
+              <SVG.Close
+                class={css({ color: 'red.500', width: 4, height: 4 })}
+              />
             </button>
             <button
               class={css({
-                px: 4,
-                py: 2,
-                bgColor: 'teal.800',
+                width: 6,
+                height: 6,
+                border: '1px solid',
+                borderColor: 'teal.200',
+                display: 'grid',
+                placeItems: 'center',
+                borderRadius: '100%',
                 cursor: 'pointer',
-                color: 'white',
                 '&:hover:not(:disabled)': {
-                  bgColor: 'teal.700',
+                  bgColor: 'teal.200',
                 },
                 '&:active:not(:disabled)': {
-                  bgColor: 'teal.900',
+                  bgColor: 'teal.300',
+                  borderColor: 'teal.300',
                 },
                 _disabled: {
                   cursor: 'not-allowed',
@@ -563,9 +581,11 @@ export const ImageUploader = component$(
                   })
               }}
             >
-              Upload!!!
+              <SVG.Check
+                class={css({ color: 'teal.500', width: 4, height: 4 })}
+              />
             </button>
-          </>
+          </div>
         )}
       </div>
     )

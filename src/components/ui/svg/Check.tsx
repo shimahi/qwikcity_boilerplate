@@ -1,6 +1,6 @@
 import type { SVGProps } from '@builder.io/qwik'
 
-export const Close = (props: SVGProps<SVGSVGElement>) => {
+export const Check = (props: SVGProps<SVGSVGElement>) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -12,11 +12,10 @@ export const Close = (props: SVGProps<SVGSVGElement>) => {
       stroke-width="2"
       stroke-linecap="round"
       stroke-linejoin="round"
-      class="lucide lucide-x"
+      class="lucide lucide-check"
       {...props}
     >
-      <path d="M18 6 6 18" />
-      <path d="m6 6 12 12" />
+      <path d="M20 6 9 17l-5-5" />
     </svg>
   )
 }
