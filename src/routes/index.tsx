@@ -444,16 +444,6 @@ export const MenuContent = component$(
   },
 )
 
-export const head: DocumentHead = {
-  title: 'Qwik Summer',
-  meta: [
-    {
-      name: 'description',
-      content: 'Sample App for Qwik City',
-    },
-  ],
-}
-
 export const ImageUploader = component$(
   ({
     avatarUrl,
@@ -581,3 +571,13 @@ export const ImageUploader = component$(
     )
   },
 )
+
+export const head: DocumentHead = {
+  title: 'Qwik Summer',
+  meta: [
+    {
+      name: 'description',
+      content: 'Sample App for Qwik City',
+    },
+  ],
+}

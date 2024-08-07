@@ -35,6 +35,11 @@ export function useUpload() {
       return storageService.generateUploadUrl(tmpKey)
     })(tmpKeySignal.value)
 
+    console.log('tmpにアップロード')
+    console.log({
+      url,
+    })
+
     // 署名付きURLに対してファイルをアップロードする
     fetch(url, {
       method: 'PUT',
