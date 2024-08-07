@@ -261,7 +261,6 @@ export const Menu = component$(
                     top: 5,
                     right: 5,
                     zIndex: 3,
-                    border: '1px solid blue',
                   }),
                 ]}
               >
