@@ -5,12 +5,12 @@ import { SVG } from './svg'
 
 export const IconButton = ({
   icon,
-  color = 'gray',
+  color = 'slate',
   class: classProp,
   ...props
 }: {
   icon: keyof typeof SVG
-  color: UtilityValues['colorPalette']
+  color?: UtilityValues['colorPalette']
   class?: ClassList
 } & ButtonHTMLAttributes<HTMLButtonElement>) => {
   const Icon = SVG[icon]

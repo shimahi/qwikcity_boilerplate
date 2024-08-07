@@ -98,7 +98,7 @@ export const Header = component$(() => {
         position: 'fixed',
         width: '100%',
         height: '64px',
-        bgColor: 'cyan.900',
+        bgColor: 'cyan.600',
         color: 'white',
         zIndex: 3,
         '& + *': {
@@ -349,21 +349,46 @@ export const MenuContent = component$(
                   currentUser.avatarUrl ?? 'https://picsum.photos/100/100'
                 }
               />
-              <div>
+              <div
+                class={css({
+                  display: 'flex',
+                  flexDirection: 'column',
+                  pl: 8,
+                  gap: 2,
+                })}
+              >
                 <div
                   class={css({
-                    textStyle: 'subtitle1',
+                    display: 'flex',
+                    gap: 2,
+                    alignItems: 'baseline',
                   })}
                 >
-                  {currentUser.displayName}
+                  <div
+                    class={css({
+                      textStyle: 'subtitle1',
+                    })}
+                  >
+                    {currentUser.displayName}
+                  </div>
+                  <IconButton icon="Pencil" />
                 </div>
                 <div
                   class={css({
-                    textStyle: 'body',
-                    color: 'gray.500',
+                    display: 'flex',
+                    gap: 2,
+                    alignItems: 'baseline',
                   })}
                 >
-                  @{currentUser.accountId}
+                  <div
+                    class={css({
+                      textStyle: 'body',
+                      color: 'gray.500',
+                    })}
+                  >
+                    @{currentUser.accountId}
+                  </div>
+                  <IconButton icon="Pencil" />
                 </div>
               </div>
 
@@ -372,9 +397,7 @@ export const MenuContent = component$(
                   textStyle: 'body',
                 })}
               >
-                山路やまみちを登りながら、こう考えた。
-                智ちに働けば角かどが立つ。情じょうに棹さおさせば流される。意地を通とおせば窮屈きゅうくつだ。とかくに人の世は住みにくい。
-                住みにくさが高こうじると、安い所へ引き越したくなる。どこへ越しても住みにくいと悟さとった時、詩が生れて、画えが出来る。
+                {currentUser.bio}
               </p>
             </div>
           </div>
