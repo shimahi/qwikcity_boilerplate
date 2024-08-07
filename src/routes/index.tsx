@@ -223,7 +223,6 @@ export const Menu = component$(
             'Modal-wrapper',
             css({
               display: 'block',
-              border: '1px solid red',
               md: {
                 display: 'none',
               },
@@ -238,7 +237,6 @@ export const Menu = component$(
                 top: 5,
                 right: 5,
                 zIndex: 3,
-                border: '1px solid blue',
               }),
             ]}
           >
