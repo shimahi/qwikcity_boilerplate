@@ -1,3 +1,4 @@
+import { IconButton } from '@/components/ui/IconButton'
 import { SVG } from '@/components/ui/svg'
 import { authorize } from '@/domains/auth'
 import { UserDomain } from '@/domains/user'
@@ -511,58 +512,17 @@ export const ImageUploader = component$(
               gap: 3,
             })}
           >
-            <button
-              class={css({
-                width: 6,
-                height: 6,
-                border: '1px solid',
-                borderColor: 'red.200',
-                display: 'grid',
-                placeItems: 'center',
-                borderRadius: '100%',
-                cursor: 'pointer',
-                '&:hover:not(:disabled)': {
-                  bgColor: 'red.200',
-                },
-                '&:active:not(:disabled)': {
-                  bgColor: 'red.300',
-                  borderColor: 'red.300',
-                },
-                _disabled: {
-                  cursor: 'not-allowed',
-                },
-              })}
+            <IconButton
+              icon={'Close'}
+              color="red"
               onClick$={() => {
                 reset()
                 tmpAvatarUrl.value = avatarUrl
               }}
-            >
-              <SVG.Close
-                class={css({ color: 'red.500', width: 4, height: 4 })}
-              />
-            </button>
-            <button
-              class={css({
-                width: 6,
-                height: 6,
-                border: '1px solid',
-                borderColor: 'teal.200',
-                display: 'grid',
-                placeItems: 'center',
-                borderRadius: '100%',
-                cursor: 'pointer',
-                '&:hover:not(:disabled)': {
-                  bgColor: 'teal.200',
-                },
-                '&:active:not(:disabled)': {
-                  bgColor: 'teal.300',
-                  borderColor: 'teal.300',
-                },
-                _disabled: {
-                  cursor: 'not-allowed',
-                },
-              })}
-              disabled={!tmpKey}
+            />
+            <IconButton
+              icon={'Check'}
+              color="teal"
               onClick$={async () => {
                 const newAvatarUrl = await save.submit({
                   tmpKey,
@@ -580,11 +540,7 @@ export const ImageUploader = component$(
                     reset()
                   })
               }}
-            >
-              <SVG.Check
-                class={css({ color: 'teal.500', width: 4, height: 4 })}
-              />
-            </button>
+            />
           </div>
         )}
       </div>

@@ -1,5 +1,5 @@
-import { relations, sql } from 'drizzle-orm'
-import { int, integer, sqliteTable, text } from 'drizzle-orm/sqlite-core'
+import { relations } from 'drizzle-orm'
+import { int, sqliteTable, text } from 'drizzle-orm/sqlite-core'
 
 export type * from './type'
 
