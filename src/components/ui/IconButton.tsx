@@ -1,4 +1,7 @@
 import { css } from '@/styled-system/css'
+
+import { token } from '@/styled-system/tokens'
+import type { Token } from '@/styled-system/tokens'
 import type { UtilityValues } from '@/styled-system/types/prop-type'
 import type { ButtonHTMLAttributes, ClassList } from '@builder.io/qwik'
 import { SVG } from './svg'
@@ -10,39 +13,49 @@ export const IconButton = ({
   ...props
 }: {
   icon: keyof typeof SVG
-  color?: UtilityValues['colorPalette']
+  color?: Omit<
+    UtilityValues['colorPalette'],
+    'current' | 'black' | 'white' | 'transparent'
+  >
   class?: ClassList
 } & ButtonHTMLAttributes<HTMLButtonElement>) => {
   const Icon = SVG[icon]
 
   return (
     <button
+      style={{
+        '--buttonBorderColor': token(`colors.${color}.200` as Token),
+        '--buttonAcvtiveColor': token(`colors.${color}.300` as Token),
+        '--buttonIconColor': token(`colors.${color}.500` as Token),
+      }}
       class={[
         css({
           width: 6,
           height: 6,
           border: '1px solid',
-          borderColor: `${color}.200`,
           display: 'grid',
           placeItems: 'center',
           borderRadius: '100%',
           cursor: 'pointer',
-          '&:hover:not(:disabled)': {
-            bgColor: `${color}.200`,
-          },
-          '&:active:not(:disabled)': {
-            bgColor: `${color}.300`,
-            borderColor: `${color}.300`,
-          },
           _disabled: {
             cursor: 'not-allowed',
+          },
+          borderColor: 'var(--buttonBorderColor)',
+          color: 'var(--buttonIconColor)',
+          _hover: {
+            backgroundColor: 'var(--buttonBorderColor)',
+          },
+          _active: {
+            backgroundColor: 'var(--buttonAcvtiveColor)',
           },
         }),
         classProp,
       ]}
       {...props}
     >
-      <Icon class={css({ color: `${color}.500`, width: 4, height: 4 })} />
+      <Icon
+        class={css({ color: 'var(--buttonIconColor)', width: 4, height: 4 })}
+      />
     </button>
   )
 }
