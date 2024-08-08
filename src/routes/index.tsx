@@ -374,13 +374,7 @@ export const MenuContent = component$(
                   userId={currentUser.id}
                 />
               </div>
-              <p
-                class={css({
-                  textStyle: 'body',
-                })}
-              >
-                {currentUser.bio}
-              </p>
+              <BioForm bio={currentUser.bio ?? ''} userId={currentUser.id} />
             </div>
           </div>
 
@@ -445,6 +439,106 @@ export const MenuContent = component$(
         >
           ログイン
         </button>
+      </div>
+    )
+  },
+)
+
+export const ImageUploader = component$(
+  ({ avatarUrl, userId }: { avatarUrl: string; userId: string }) => {
+    const ref = useSignal<HTMLInputElement>()
+    const tmpAvatarUrl = useSignal<string>(avatarUrl)
+    const { tmpKey, upload, reset } = useUpload()
+    const save = useSaveImage()
+    const updateUser = useUpdateUser()
+
+    const handleImageClick = $(() => {
+      ref.value?.click()
+    })
+
+    const handleFileChange = $(async (event: Event) => {
+      const input = event.target as HTMLInputElement
+      if (input.files && input.files.length > 0) {
+        const file = input.files[0]
+        tmpAvatarUrl.value = URL.createObjectURL(file)
+
+        await upload(file)
+      }
+    })
+
+    return (
+      <div>
+        <button onClick$={handleImageClick} class={hover()}>
+          <div
+            class={css({
+              width: 'auto',
+              height: '64px',
+              mx: 'auto',
+              objectFit: 'cover',
+              aspectRatio: 1,
+            })}
+          >
+            <img
+              src={tmpAvatarUrl.value}
+              alt=""
+              class={css({
+                objectFit: 'cover',
+                borderRadius: '100%',
+                width: '100%',
+                height: '100%',
+              })}
+            />
+          </div>
+        </button>
+
+        <input
+          ref={ref}
+          type="file"
+          accept=".jpeg,.jpg,.png"
+          onChange$={handleFileChange}
+          class={css({ display: 'none' })}
+        />
+
+        {!!tmpKey && (
+          <div
+            class={css({
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              gap: 3,
+            })}
+          >
+            <IconButton
+              icon={'Close'}
+              color="red"
+              onClick$={() => {
+                reset()
+                tmpAvatarUrl.value = avatarUrl
+              }}
+            />
+            <IconButton
+              icon={'Check'}
+              color="teal"
+              onClick$={async () => {
+                const newAvatarUrl = await save.submit({
+                  tmpKey,
+                  userId: userId,
+                })
+
+                updateUser
+                  .submit({
+                    userId: userId,
+                    inputs: {
+                      avatarUrl: `${newAvatarUrl?.value}`,
+                    },
+                  })
+                  .then(() => {
+                    reset()
+                  })
+              }}
+            />
+          </div>
+        )}
       </div>
     )
   },
@@ -607,97 +701,48 @@ export const AccountIdForm = component$(
   },
 )
 
-export const ImageUploader = component$(
-  ({ avatarUrl, userId }: { avatarUrl: string; userId: string }) => {
-    const ref = useSignal<HTMLInputElement>()
-    const tmpAvatarUrl = useSignal<string>(avatarUrl)
-    const { tmpKey, upload, reset } = useUpload()
-    const save = useSaveImage()
+export const BioForm = component$(
+  ({ bio, userId }: { bio: string; userId: string }) => {
+    const editingBio = useSignal(false)
+    const bioInput = useSignal(bio)
     const updateUser = useUpdateUser()
-
-    const handleImageClick = $(() => {
-      ref.value?.click()
-    })
-
-    const handleFileChange = $(async (event: Event) => {
-      const input = event.target as HTMLInputElement
-      if (input.files && input.files.length > 0) {
-        const file = input.files[0]
-        tmpAvatarUrl.value = URL.createObjectURL(file)
-
-        await upload(file)
-      }
-    })
 
     return (
       <div>
-        <button onClick$={handleImageClick} class={hover()}>
-          <div
-            class={css({
-              width: 'auto',
-              height: '64px',
-              mx: 'auto',
-              objectFit: 'cover',
-              aspectRatio: 1,
-            })}
-          >
-            <img
-              src={tmpAvatarUrl.value}
-              alt=""
-              class={css({
-                objectFit: 'cover',
-                borderRadius: '100%',
-                width: '100%',
-                height: '100%',
-              })}
-            />
-          </div>
-        </button>
-
-        <input
-          ref={ref}
-          type="file"
-          accept=".jpeg,.jpg,.png"
-          onChange$={handleFileChange}
-          class={css({ display: 'none' })}
+        <textarea
+          rows={5}
+          value={bioInput.value}
+          placeholder="プロフィールを入力してください"
+          onFocusIn$={() => {
+            editingBio.value = true
+          }}
+          onFocus$={() => {
+            editingBio.value = true
+          }}
+          onInput$={(e) => {
+            bioInput.value = (e.target as HTMLInputElement).value
+          }}
         />
-
-        {!!tmpKey && (
-          <div
-            class={css({
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              gap: 3,
-            })}
-          >
+        {editingBio.value && (
+          <div class={css({ display: 'flex', gap: 2 })}>
             <IconButton
-              icon={'Close'}
+              icon="Close"
               color="red"
               onClick$={() => {
-                reset()
-                tmpAvatarUrl.value = avatarUrl
+                editingBio.value = false
               }}
             />
             <IconButton
-              icon={'Check'}
+              icon="Check"
               color="teal"
               onClick$={async () => {
-                const newAvatarUrl = await save.submit({
-                  tmpKey,
-                  userId: userId,
+                editingBio.value = false
+                await updateUser.submit({
+                  userId,
+                  inputs: {
+                    bio: bioInput.value,
+                  },
                 })
-
-                updateUser
-                  .submit({
-                    userId: userId,
-                    inputs: {
-                      avatarUrl: `${newAvatarUrl?.value}`,
-                    },
-                  })
-                  .then(() => {
-                    reset()
-                  })
               }}
             />
           </div>
