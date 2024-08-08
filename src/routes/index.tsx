@@ -553,76 +553,95 @@ export const DisplayNameForm = component$(
     const updateUser = useUpdateUser()
 
     return (
-      <div
-        class={css({
-          display: 'flex',
-          gap: 2,
-          alignItems: 'baseline',
-        })}
-      >
-        {editingDisplayName.value ? (
+      <div class={css({ pl: 10 })}>
+        <div
+          class={css({
+            display: 'flex',
+            alignItems: 'baseline',
+            width: '200px',
+          })}
+        >
+          {/* 名前を表示するところ */}
+          <div class={css({ width: '136px' })}>
+            {editingDisplayName.value ? (
+              <div class={css({ width: '100%' })}>
+                <input
+                  type="text"
+                  value={displayNameInput.value}
+                  onInput$={(e) => {
+                    displayNameInput.value = (
+                      e.target as HTMLInputElement
+                    ).value
+                  }}
+                  class={css({
+                    width: '100%',
+                    textAlign: 'center',
+                    textStyle: 'subtitle1',
+                  })}
+                />
+              </div>
+            ) : (
+              <div class={css({ width: '100%' })}>
+                <h3
+                  class={css({
+                    width: '100%',
+                    textAlign: 'center',
+                    textStyle: 'subtitle1',
+                  })}
+                >
+                  {displayName}
+                </h3>
+              </div>
+            )}
+          </div>
+          {/* ボタンを表示するところ */}
           <div
             class={css({
-              display: 'flex',
-              alignItems: 'baseline',
-              gap: 2,
+              minWidth: '64px',
+              flex: 1,
             })}
           >
-            <input
-              type="text"
-              value={displayNameInput.value}
-              onInput$={(e) => {
-                displayNameInput.value = (e.target as HTMLInputElement).value
-              }}
-              class={css({
-                textStyle: 'body',
-                borderBottom: '1px solid gray',
-                minWidth: '128px',
-              })}
-            />
-            <div class={css({ display: 'flex', gap: 2 })}>
-              <IconButton
-                icon="Close"
-                color="red"
-                onClick$={() => {
-                  displayNameInput.value = displayName
-                  editingDisplayName.value = false
-                }}
-              />
-              <IconButton
-                icon="Check"
-                color="teal"
-                onClick$={async () => {
-                  editingDisplayName.value = false
-                  await updateUser.submit({
-                    userId,
-                    inputs: {
-                      displayName: displayNameInput.value,
-                    },
-                  })
-                }}
-              />
-            </div>
+            {editingDisplayName.value ? (
+              <div
+                class={css({
+                  display: 'flex',
+                  gap: 2,
+                })}
+              >
+                <IconButton
+                  icon="Close"
+                  color="red"
+                  onClick$={() => {
+                    displayNameInput.value = displayName
+                    editingDisplayName.value = false
+                  }}
+                />
+                <IconButton
+                  icon="Check"
+                  color="teal"
+                  onClick$={async () => {
+                    editingDisplayName.value = false
+                    await updateUser.submit({
+                      userId,
+                      inputs: {
+                        displayName: displayNameInput.value,
+                      },
+                    })
+                  }}
+                />
+              </div>
+            ) : (
+              <div>
+                <IconButton
+                  icon="Pencil"
+                  onClick$={() => {
+                    editingDisplayName.value = true
+                  }}
+                />
+              </div>
+            )}
           </div>
-        ) : (
-          <>
-            <div
-              class={css({
-                textStyle: 'subtitle1',
-                minWidth: '128px',
-                textAlign: 'center',
-              })}
-            >
-              {displayName}
-            </div>
-            <IconButton
-              icon="Pencil"
-              onClick$={() => {
-                editingDisplayName.value = true
-              }}
-            />
-          </>
-        )}
+        </div>
       </div>
     )
   },
@@ -633,79 +652,96 @@ export const AccountIdForm = component$(
     const editingAccountId = useSignal(false)
     const accountIdInput = useSignal(accountId)
     const updateUser = useUpdateUser()
-
     return (
-      <div
-        class={css({
-          display: 'flex',
-          alignItems: 'center',
-          gap: 2,
-        })}
-      >
-        {editingAccountId.value ? (
+      <div class={css({ pl: 10 })}>
+        <div
+          class={css({
+            display: 'flex',
+            alignItems: 'baseline',
+            width: '200px',
+          })}
+        >
+          {/* 名前を表示するところ */}
+          <div class={css({ width: '136px' })}>
+            {editingAccountId.value ? (
+              <div class={css({ width: '100%' })}>
+                <input
+                  type="text"
+                  value={accountIdInput.value}
+                  onInput$={(e) => {
+                    accountIdInput.value = (e.target as HTMLInputElement).value
+                  }}
+                  class={css({
+                    width: '100%',
+                    textAlign: 'center',
+                    textStyle: 'caption',
+                    color: 'gray.500',
+                  })}
+                />
+              </div>
+            ) : (
+              <div class={css({ width: '100%' })}>
+                <h4
+                  class={css({
+                    width: '100%',
+                    textAlign: 'center',
+                    textStyle: 'caption',
+                    color: 'gray.500',
+                  })}
+                >
+                  @{accountId}
+                </h4>
+              </div>
+            )}
+          </div>
+          {/* ボタンを表示するところ */}
           <div
             class={css({
-              display: 'flex',
-              alignItems: 'center',
-              gap: 2,
+              minWidth: '64px',
+              flex: 1,
             })}
           >
-            <input
-              type="text"
-              value={accountIdInput.value}
-              onInput$={(e) => {
-                accountIdInput.value = (e.target as HTMLInputElement).value
-              }}
-              class={css({
-                textStyle: 'body',
-                borderBottom: '1px solid gray',
-                minWidth: '128px',
-              })}
-            />
-            <div class={css({ display: 'flex', gap: 2 })}>
-              <IconButton
-                icon="Close"
-                color="red"
-                onClick$={() => {
-                  accountIdInput.value = accountId
-                  editingAccountId.value = false
-                }}
-              />
-              <IconButton
-                icon="Check"
-                color="teal"
-                onClick$={async () => {
-                  editingAccountId.value = false
-                  await updateUser.submit({
-                    userId,
-                    inputs: {
-                      accountId: accountIdInput.value,
-                    },
-                  })
-                }}
-              />
-            </div>
+            {editingAccountId.value ? (
+              <div
+                class={css({
+                  display: 'flex',
+                  gap: 2,
+                })}
+              >
+                <IconButton
+                  icon="Close"
+                  color="red"
+                  onClick$={() => {
+                    accountIdInput.value = accountId
+                    editingAccountId.value = false
+                  }}
+                />
+                <IconButton
+                  icon="Check"
+                  color="teal"
+                  onClick$={async () => {
+                    editingAccountId.value = false
+                    await updateUser.submit({
+                      userId,
+                      inputs: {
+                        accountId: accountIdInput.value,
+                      },
+                    })
+                  }}
+                />
+              </div>
+            ) : (
+              <div>
+                <IconButton
+                  icon="Pencil"
+                  onClick$={() => {
+                    editingAccountId.value = true
+                  }}
+                />
+              </div>
+            )}
           </div>
-        ) : (
-          <>
-            <div
-              class={css({
-                textStyle: 'body',
-                color: 'gray.500',
-                minWidth: '128px',
-                textAlign: 'center',
-              })}
-            >
-              @{accountId}
-            </div>
-            <IconButton
-              icon="Pencil"
-              onClick$={() => {
-                editingAccountId.value = true
-              }}
-            />
-          </>
-        )}
+        </div>
       </div>
     )
   },
