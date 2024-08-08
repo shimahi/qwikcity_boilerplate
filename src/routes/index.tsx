@@ -307,9 +307,6 @@ export const MenuContent = component$(
     const signIn = useAuthSignin()
     const signOut = useAuthSignout()
 
-    const editingAccountId = useSignal(false)
-    const accountIdInput = useSignal(currentUser?.accountId)
-
     const handleSignIn = $(() => {
       signIn
         .submit({
