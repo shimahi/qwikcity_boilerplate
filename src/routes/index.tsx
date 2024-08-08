@@ -683,6 +683,23 @@ export const AccountIdForm = component$(
     const editingAccountId = useSignal(false)
     const accountIdInput = useSignal(accountId)
     const updateUser = useUpdateUser()
+
+    const handleKeyDown = $((event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        accountIdInput.value = accountId
+        editingAccountId.value = false
+      } else if (event.key === 'Enter' && !event.isComposing) {
+        event.preventDefault()
+        editingAccountId.value = false
+        updateUser.submit({
+          userId,
+          inputs: {
+            accountId: accountIdInput.value,
+          },
+        })
+      }
+    })
+
     return (
       <div class={css({ pl: 10 })}>
         <div
@@ -698,6 +715,8 @@ export const AccountIdForm = component$(
               <div class={css({ width: '100%', position: 'relative' })}>
                 <input
                   type="text"
+                  autofocus
+                  onKeyDown$={handleKeyDown}
                   value={accountIdInput.value}
                   onInput$={(e) => {
                     accountIdInput.value = (e.target as HTMLInputElement).value
@@ -791,11 +810,23 @@ export const BioForm = component$(
     const editingBio = useSignal(false)
     const bioInput = useSignal(bio)
     const updateUser = useUpdateUser()
+    const ref = useSignal<HTMLTextAreaElement>()
+
+    const handleKeyDown = $((event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        bioInput.value = bio
+        editingBio.value = false
+        // focusを外す
+        ref.value?.blur()
+      }
+    })
 
     return (
       <div>
         <textarea
+          ref={ref}
           rows={5}
+          onKeyDown$={handleKeyDown}
           value={bioInput.value}
           placeholder="プロフィールを入力してください"
           onFocusIn$={() => {
