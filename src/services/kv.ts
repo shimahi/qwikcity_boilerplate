@@ -1,6 +1,5 @@
 import type { User } from '@/schemas'
 import type { RequestEventBase } from '@builder.io/qwik-city'
-import cuid from 'cuid'
 
 /**
  * 認証ユーザー情報の型
@@ -36,7 +35,7 @@ export class KVService {
    */
   readonly user = {
     put: async (user: AuthUser) => {
-      const kvAuthKey = this.kvAuthKey ?? `auth:${user.id}:${cuid()}`
+      const kvAuthKey = this.kvAuthKey ?? `auth:${user.id}`
 
       await this.kv.put(
         kvAuthKey,
