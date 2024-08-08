@@ -556,6 +556,7 @@ export const DisplayNameForm = component$(
     const editingDisplayName = useSignal(false)
     const displayNameInput = useSignal(displayName)
     const updateUser = useUpdateUser()
+    const inputRef = useSignal<HTMLInputElement>()
 
     const handleKeyDown = $((event: KeyboardEvent) => {
       if (event.key === 'Escape') {
@@ -563,13 +564,16 @@ export const DisplayNameForm = component$(
         editingDisplayName.value = false
       } else if (event.key === 'Enter' && !event.isComposing) {
         event.preventDefault()
-        editingDisplayName.value = false
-        updateUser.submit({
-          userId,
-          inputs: {
-            displayName: displayNameInput.value,
-          },
-        })
+        updateUser
+          .submit({
+            userId,
+            inputs: {
+              displayName: displayNameInput.value,
+            },
+          })
+          .then(() => {
+            editingDisplayName.value = false
+          })
       }
     })
 
@@ -587,7 +591,7 @@ export const DisplayNameForm = component$(
             {editingDisplayName.value ? (
               <div class={css({ width: '100%', position: 'relative' })}>
                 <input
-                  autofocus
+                  ref={inputRef}
                   type="text"
                   value={displayNameInput.value}
                   onInput$={(e) => {
@@ -667,6 +671,11 @@ export const DisplayNameForm = component$(
                   icon="Pencil"
                   onClick$={() => {
                     editingDisplayName.value = true
+                    // オートフォーカス処理
+                    const timeOutId = setTimeout(() => {
+                      inputRef.value?.focus()
+                      clearTimeout(timeOutId)
+                    }, 50)
                   }}
                 />
               </div>
@@ -683,6 +692,7 @@ export const AccountIdForm = component$(
     const editingAccountId = useSignal(false)
     const accountIdInput = useSignal(accountId)
     const updateUser = useUpdateUser()
+    const inputRef = useSignal<HTMLInputElement>()
 
     const handleKeyDown = $((event: KeyboardEvent) => {
       if (event.key === 'Escape') {
@@ -690,13 +700,16 @@ export const AccountIdForm = component$(
         editingAccountId.value = false
       } else if (event.key === 'Enter' && !event.isComposing) {
         event.preventDefault()
-        editingAccountId.value = false
-        updateUser.submit({
-          userId,
-          inputs: {
-            accountId: accountIdInput.value,
-          },
-        })
+        updateUser
+          .submit({
+            userId,
+            inputs: {
+              accountId: accountIdInput.value,
+            },
+          })
+          .then(() => {
+            editingAccountId.value = false
+          })
       }
     })
 
@@ -715,7 +728,7 @@ export const AccountIdForm = component$(
               <div class={css({ width: '100%', position: 'relative' })}>
                 <input
                   type="text"
-                  autofocus
+                  ref={inputRef}
                   onKeyDown$={handleKeyDown}
                   value={accountIdInput.value}
                   onInput$={(e) => {
@@ -794,6 +807,11 @@ export const AccountIdForm = component$(
                   icon="Pencil"
                   onClick$={() => {
                     editingAccountId.value = true
+                    // オートフォーカス処理
+                    const timeOutId = setTimeout(() => {
+                      inputRef.value?.focus()
+                      clearTimeout(timeOutId)
+                    }, 50)
                   }}
                 />
               </div>
@@ -818,6 +836,25 @@ export const BioForm = component$(
         editingBio.value = false
         // focusを外す
         ref.value?.blur()
+      }
+      // 日本語入力していない状態で cmd + enter を押したら送信
+      if (
+        event.key === 'Enter' &&
+        (event.metaKey || event.ctrlKey) &&
+        !event.isComposing
+      ) {
+        event.preventDefault()
+        updateUser
+          .submit({
+            userId,
+            inputs: {
+              bio: bioInput.value,
+            },
+          })
+          .then(() => {
+            editingBio.value = false
+            ref.value?.blur()
+          })
       }
     })
 
