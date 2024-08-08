@@ -592,6 +592,7 @@ export const DisplayNameForm = component$(
               <div class={css({ width: '100%', position: 'relative' })}>
                 <input
                   ref={inputRef}
+                  autofocus
                   type="text"
                   value={displayNameInput.value}
                   onInput$={(e) => {
@@ -731,6 +732,7 @@ export const AccountIdForm = component$(
               <div class={css({ width: '100%', position: 'relative' })}>
                 <input
                   type="text"
+                  autofocus
                   ref={inputRef}
                   onKeyDown$={handleKeyDown}
                   value={accountIdInput.value}
