@@ -52,12 +52,20 @@ export const useSaveImage = routeAction$(
 export const useUpdateUser = routeAction$(
   async (data, requestEvent) => {
     const userDomain = new UserDomain(requestEvent)
-    return await userDomain.update(data.userId, data.inputs)
+    const currentUser = await authorize(requestEvent)
+    const inputs = {
+      ...currentUser,
+      ...data.inputs,
+    }
+    return await userDomain.update(data.userId, inputs)
   },
   zod$({
     userId: z.string(),
     inputs: z.object({
-      avatarUrl: z.string().nullable(),
+      avatarUrl: z.string().optional(),
+      displayName: z.string().optional(),
+      accountId: z.string().optional(),
+      bio: z.string().optional(),
     }),
   }),
 )
@@ -299,6 +307,9 @@ export const MenuContent = component$(
     const signIn = useAuthSignin()
     const signOut = useAuthSignout()
 
+    const editingAccountId = useSignal(false)
+    const accountIdInput = useSignal(currentUser?.accountId)
+
     const handleSignIn = $(() => {
       signIn
         .submit({
@@ -344,7 +355,7 @@ export const MenuContent = component$(
               })}
             >
               <ImageUploader
-                currentUser={currentUser}
+                userId={currentUser.id}
                 avatarUrl={
                   currentUser.avatarUrl ?? 'https://picsum.photos/100/100'
                 }
@@ -357,41 +368,15 @@ export const MenuContent = component$(
                   gap: 2,
                 })}
               >
-                <div
-                  class={css({
-                    display: 'flex',
-                    gap: 2,
-                    alignItems: 'baseline',
-                  })}
-                >
-                  <div
-                    class={css({
-                      textStyle: 'subtitle1',
-                    })}
-                  >
-                    {currentUser.displayName}
-                  </div>
-                  <IconButton icon="Pencil" />
-                </div>
-                <div
-                  class={css({
-                    display: 'flex',
-                    gap: 2,
-                    alignItems: 'baseline',
-                  })}
-                >
-                  <div
-                    class={css({
-                      textStyle: 'body',
-                      color: 'gray.500',
-                    })}
-                  >
-                    @{currentUser.accountId}
-                  </div>
-                  <IconButton icon="Pencil" />
-                </div>
+                <DisplayNameForm
+                  displayName={currentUser.displayName}
+                  userId={currentUser.id}
+                />
+                <AccountIdForm
+                  accountId={currentUser.accountId}
+                  userId={currentUser.id}
+                />
               </div>
-
               <p
                 class={css({
                   textStyle: 'body',
@@ -468,11 +453,165 @@ export const MenuContent = component$(
   },
 )
 
+export const DisplayNameForm = component$(
+  ({ displayName, userId }: { displayName: string; userId: string }) => {
+    const editingDisplayName = useSignal(false)
+    const displayNameInput = useSignal(displayName)
+    const updateUser = useUpdateUser()
+
+    return (
+      <div
+        class={css({
+          display: 'flex',
+          gap: 2,
+          alignItems: 'baseline',
+        })}
+      >
+        {editingDisplayName.value ? (
+          <div
+            class={css({
+              display: 'flex',
+              alignItems: 'baseline',
+              gap: 2,
+            })}
+          >
+            <input
+              type="text"
+              value={displayNameInput.value}
+              onInput$={(e) => {
+                displayNameInput.value = (e.target as HTMLInputElement).value
+              }}
+              class={css({
+                textStyle: 'body',
+                borderBottom: '1px solid gray',
+              })}
+            />
+            <div class={css({ display: 'flex', gap: 2 })}>
+              <IconButton
+                icon="Close"
+                color="red"
+                onClick$={() => {
+                  editingDisplayName.value = false
+                }}
+              />
+              <IconButton
+                icon="Check"
+                color="teal"
+                onClick$={async () => {
+                  editingDisplayName.value = false
+                  await updateUser.submit({
+                    userId,
+                    inputs: {
+                      displayName: displayNameInput.value,
+                    },
+                  })
+                }}
+              />
+            </div>
+          </div>
+        ) : (
+          <>
+            <div
+              class={css({
+                textStyle: 'subtitle1',
+              })}
+            >
+              {displayName}
+            </div>
+            <IconButton
+              icon="Pencil"
+              onClick$={() => {
+                editingDisplayName.value = true
+              }}
+            />
+          </>
+        )}
+      </div>
+    )
+  },
+)
+
+export const AccountIdForm = component$(
+  ({ accountId, userId }: { accountId: string; userId: string }) => {
+    const editingAccountId = useSignal(false)
+    const accountIdInput = useSignal(accountId)
+    const updateUser = useUpdateUser()
+
+    return (
+      <div
+        class={css({
+          display: 'flex',
+          alignItems: 'center',
+          gap: 2,
+        })}
+      >
+        {editingAccountId.value ? (
+          <div
+            class={css({
+              display: 'flex',
+              alignItems: 'center',
+              gap: 2,
+            })}
+          >
+            <input
+              type="text"
+              value={accountIdInput.value}
+              onInput$={(e) => {
+                accountIdInput.value = (e.target as HTMLInputElement).value
+              }}
+              class={css({
+                textStyle: 'body',
+                borderBottom: '1px solid gray',
+              })}
+            />
+            <div class={css({ display: 'flex', gap: 2 })}>
+              <IconButton
+                icon="Close"
+                color="red"
+                onClick$={() => {
+                  editingAccountId.value = false
+                }}
+              />
+              <IconButton
+                icon="Check"
+                color="teal"
+                onClick$={async () => {
+                  editingAccountId.value = false
+                  await updateUser.submit({
+                    userId,
+                    inputs: {
+                      accountId: accountIdInput.value,
+                    },
+                  })
+                }}
+              />
+            </div>
+          </div>
+        ) : (
+          <>
+            <div
+              class={css({
+                textStyle: 'body',
+                color: 'gray.500',
+              })}
+            >
+              @{accountId}
+            </div>
+            <IconButton
+              icon="Pencil"
+              onClick$={() => {
+                editingAccountId.value = true
+              }}
+            />
+          </>
+        )}
+      </div>
+    )
+  },
+)
+
 export const ImageUploader = component$(
-  ({
-    avatarUrl,
-    currentUser,
-  }: { avatarUrl: string; currentUser: AuthUser }) => {
+  ({ avatarUrl, userId }: { avatarUrl: string; userId: string }) => {
     const ref = useSignal<HTMLInputElement>()
     const tmpAvatarUrl = useSignal<string>(avatarUrl)
     const { tmpKey, upload, reset } = useUpload()
@@ -549,12 +688,12 @@ export const ImageUploader = component$(
               onClick$={async () => {
                 const newAvatarUrl = await save.submit({
                   tmpKey,
-                  userId: currentUser.id,
+                  userId: userId,
                 })
 
                 updateUser
                   .submit({
-                    userId: currentUser.id,
+                    userId: userId,
                     inputs: {
                       avatarUrl: `${newAvatarUrl?.value}`,
                     },
