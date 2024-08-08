@@ -43,7 +43,6 @@ export const { onRequest, useAuthSession, useAuthSignin, useAuthSignout } =
           })
           if (existingUser) {
             token.kvAuthKey = await kvService.user.put(existingUser)
-
             return token
           }
 
