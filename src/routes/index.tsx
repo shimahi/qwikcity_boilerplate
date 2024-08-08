@@ -338,6 +338,7 @@ export const MenuContent = component$(
               height: '100%',
               display: 'grid',
               placeItems: 'center',
+              width: '100%',
             })}
           >
             <div
@@ -349,6 +350,7 @@ export const MenuContent = component$(
                 alignItems: 'center',
                 height: 16,
                 px: 5,
+                width: '100%',
               })}
             >
               <ImageUploader
@@ -575,6 +577,7 @@ export const DisplayNameForm = component$(
               class={css({
                 textStyle: 'body',
                 borderBottom: '1px solid gray',
+                minWidth: '128px',
               })}
             />
             <div class={css({ display: 'flex', gap: 2 })}>
@@ -582,6 +585,7 @@ export const DisplayNameForm = component$(
                 icon="Close"
                 color="red"
                 onClick$={() => {
+                  displayNameInput.value = displayName
                   editingDisplayName.value = false
                 }}
               />
@@ -605,6 +609,8 @@ export const DisplayNameForm = component$(
             <div
               class={css({
                 textStyle: 'subtitle1',
+                minWidth: '128px',
+                textAlign: 'center',
               })}
             >
               {displayName}
@@ -653,6 +659,7 @@ export const AccountIdForm = component$(
               class={css({
                 textStyle: 'body',
                 borderBottom: '1px solid gray',
+                minWidth: '128px',
               })}
             />
             <div class={css({ display: 'flex', gap: 2 })}>
@@ -660,6 +667,7 @@ export const AccountIdForm = component$(
                 icon="Close"
                 color="red"
                 onClick$={() => {
+                  accountIdInput.value = accountId
                   editingAccountId.value = false
                 }}
               />
@@ -684,6 +692,8 @@ export const AccountIdForm = component$(
               class={css({
                 textStyle: 'body',
                 color: 'gray.500',
+                minWidth: '128px',
+                textAlign: 'center',
               })}
             >
               @{accountId}
@@ -716,20 +726,28 @@ export const BioForm = component$(
           onFocusIn$={() => {
             editingBio.value = true
           }}
-          onFocus$={() => {
-            editingBio.value = true
-          }}
           onInput$={(e) => {
             bioInput.value = (e.target as HTMLInputElement).value
           }}
+          class={css({
+            textStyle: 'body',
+            transition: 'background-color 0.3s ',
+            minWidth: '200px',
+            '&:hover:not(:focus)': {
+              bgColor: 'gray.200',
+            },
+          })}
         />
         {editingBio.value && (
-          <div class={css({ display: 'flex', gap: 2 })}>
+          <div
+            class={css({ display: 'flex', gap: 2, justifyContent: 'flex-end' })}
+          >
             <IconButton
               icon="Close"
               color="red"
               onClick$={() => {
                 editingBio.value = false
+                bioInput.value = bio
               }}
             />
             <IconButton
