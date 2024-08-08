@@ -710,6 +710,9 @@ export const AccountIdForm = component$(
           .then(() => {
             editingAccountId.value = false
           })
+          .catch((e) => {
+            console.log({ e })
+          })
       }
     })
 
