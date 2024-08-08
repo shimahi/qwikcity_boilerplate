@@ -63,9 +63,14 @@ export const useUpdateUser = routeAction$(
     userId: z.string(),
     inputs: z.object({
       avatarUrl: z.string().optional(),
-      displayName: z.string().optional(),
-      accountId: z.string().optional(),
-      bio: z.string().optional(),
+      displayName: z.string().min(1).max(50).optional(),
+      accountId: z
+        .string()
+        .min(1)
+        .max(20)
+        .regex(/^[a-zA-Z0-9]+$/)
+        .optional(),
+      bio: z.string().max(140).optional(),
     }),
   }),
 )
