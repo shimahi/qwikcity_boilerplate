@@ -44,9 +44,6 @@ export const { onRequest, useAuthSession, useAuthSignin, useAuthSignout } =
           if (existingUser) {
             token.kvAuthKey = await kvService.user.put(existingUser)
 
-            // ユーザーのDBのデータに合わせてKVを更新する
-            await kvService.user.put(existingUser)
-
             return token
           }
 
@@ -69,6 +66,18 @@ export const { onRequest, useAuthSession, useAuthSignin, useAuthSignout } =
          * これらのセッション情報はsharedMap.get('session')を用いて参照できる
          */
         session: async ({ session, token }) => {
+          // ユーザーのDBのデータに合わせてKVを更新する
+          if (token?.kvAuthKey) {
+            const user = await kvService.user.get()
+            if (user) {
+              const userId = user?.id
+              const userData = await userDomain.get(userId)
+              if (userData) {
+                await kvService.user.put(userData)
+              }
+            }
+          }
+
           return {
             ...session,
             kvAuthKey: token?.kvAuthKey,
