@@ -557,6 +557,22 @@ export const DisplayNameForm = component$(
     const displayNameInput = useSignal(displayName)
     const updateUser = useUpdateUser()
 
+    const handleKeyDown = $((event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        displayNameInput.value = displayName
+        editingDisplayName.value = false
+      } else if (event.key === 'Enter' && !event.isComposing) {
+        event.preventDefault()
+        editingDisplayName.value = false
+        updateUser.submit({
+          userId,
+          inputs: {
+            displayName: displayNameInput.value,
+          },
+        })
+      }
+    })
+
     return (
       <div class={css({ pl: 10 })}>
         <div
@@ -571,6 +587,7 @@ export const DisplayNameForm = component$(
             {editingDisplayName.value ? (
               <div class={css({ width: '100%', position: 'relative' })}>
                 <input
+                  autofocus
                   type="text"
                   value={displayNameInput.value}
                   onInput$={(e) => {
@@ -578,6 +595,7 @@ export const DisplayNameForm = component$(
                       e.target as HTMLInputElement
                     ).value
                   }}
+                  onKeyDown$={handleKeyDown}
                   class={css({
                     width: '100%',
                     textAlign: 'center',
