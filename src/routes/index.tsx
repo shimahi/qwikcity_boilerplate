@@ -564,7 +564,7 @@ export const DisplayNameForm = component$(
           {/* 名前を表示するところ */}
           <div class={css({ width: '136px' })}>
             {editingDisplayName.value ? (
-              <div class={css({ width: '100%' })}>
+              <div class={css({ width: '100%', position: 'relative' })}>
                 <input
                   type="text"
                   value={displayNameInput.value}
@@ -577,6 +577,14 @@ export const DisplayNameForm = component$(
                     width: '100%',
                     textAlign: 'center',
                     textStyle: 'subtitle1',
+                  })}
+                />
+                <div
+                  class={css({
+                    position: 'absolute',
+                    bottom: 0,
+                    width: '100%',
+                    borderBottom: '1px solid gray',
                   })}
                 />
               </div>
@@ -664,7 +672,7 @@ export const AccountIdForm = component$(
           {/* 名前を表示するところ */}
           <div class={css({ width: '136px' })}>
             {editingAccountId.value ? (
-              <div class={css({ width: '100%' })}>
+              <div class={css({ width: '100%', position: 'relative' })}>
                 <input
                   type="text"
                   value={accountIdInput.value}
@@ -676,6 +684,14 @@ export const AccountIdForm = component$(
                     textAlign: 'center',
                     textStyle: 'caption',
                     color: 'gray.500',
+                  })}
+                />
+                <div
+                  class={css({
+                    position: 'absolute',
+                    bottom: 0,
+                    width: '100%',
+                    borderBottom: '1px solid gray',
                   })}
                 />
               </div>
